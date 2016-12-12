@@ -1061,7 +1061,7 @@ body {
 
 body{
      background-color: block;
-     background: url('/hexo-theme-huxblog/img/bk.jpg') center top / cover no-repeat fixed transparent;
+     background: url('/img/bk.jpg') center top / cover no-repeat fixed transparent;
 }
 
 .mybk{
