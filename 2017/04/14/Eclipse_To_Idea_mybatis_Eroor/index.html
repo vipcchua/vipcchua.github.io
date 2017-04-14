@@ -13,11 +13,11 @@
 
     <title>
         
-          About - Cchua的博客 | Cchua&#39;s Blog
+          关于 eclipse 迁移到idea mybatis Xml出现 Invalid bound statement (not found) 的问题 - Cchua的博客 | Cchua&#39;s Blog
         
     </title>
 
-    <link rel="canonical" href="http://yoursite.com/about/">
+    <link rel="canonical" href="http://yoursite.com/2017/04/14/Eclipse_To_Idea_mybatis_Eroor/">
 
     <!-- Bootstrap Core CSS -->
     <link rel="stylesheet" href="/css/bootstrap.min.css">
@@ -147,210 +147,157 @@
 
 
     <!-- Main Content -->
-    <!-- Page Header -->
-<header class="intro-header" style="background-image: url('/img/about-bg.jpg')">
+    
+
+
+<!-- Post Header -->
+<style type="text/css">
+    header.intro-header{
+        background-image: url('/img/home-bg.jpg')
+    }
+</style>
+<header class="intro-header" >
     <div class="container">
-        <div class="row ">
-            <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1 ">
-                <div class="site-heading">
-                    <h1>About</h1>
-                    <!--<hr class="small">-->
-                    <span class="subheading">Hey, this is Kaijun.</span>
+        <div class="row">
+            <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+                <div class="post-heading">
+                    <div class="tags">
+                        
+                          <a class="tag" href="/tags/#Spring" title="Spring">Spring</a>
+                        
+                          <a class="tag" href="/tags/#MyBatis" title="MyBatis">MyBatis</a>
+                        
+                          <a class="tag" href="/tags/#Web开发" title="Web开发">Web开发</a>
+                        
+                          <a class="tag" href="/tags/#Java" title="Java">Java</a>
+                        
+                    </div>
+                    <h1>关于 eclipse 迁移到idea mybatis Xml出现 Invalid bound statement (not found) 的问题</h1>
+                    <h2 class="subheading"></h2>
+                    <span class="meta">
+                        Posted by Cchua Chen on
+                        2017-04-14
+                    </span>
                 </div>
             </div>
         </div>
     </div>
 </header>
 
+<!-- Post Content -->
+<article>
+    <div class="container">
+        <div class="row mybk">
 
-
-<!-- Main Content -->
-<div class="container">
-    <div class="row mybk">
-        
-
-<!-- USE SIDEBAR -->
     <!-- Post Container -->
             <div class="
-                col-lg-8 col-lg-offset-1
-                col-md-8 col-md-offset-1
-                col-sm-12
-                col-xs-12
-                post-container
-            ">
-            
-                <blockquote>
-<p>Name:Cchua<br>Email:vipcchua@Hotmail.com<br>QQ：vipcchua@qq.com</p>
-</blockquote>
-<p>2017年4月14日09:57:14 </p>
+                col-lg-8 col-lg-offset-2
+                col-md-10 col-md-offset-1
+                post-container">
+
+                <pre><code>搬了一台旧电脑到学校开发，应用一开多用eclipse真的卡的不行 于是想换一款开发软件，想起同学以前安利过idea，便开始给自己挖坑。
+</code></pre><p>##正文</p>
+<pre><code>我的项目采用了Spring-Boot+Mybatis，为了提高开发效率采用了mybatis-generator的反向生成代码生成了Xml，测试的时候突然间发现报错，我用注解写的语句可以正常运行，可是Xml的代码均出现了一下错误
 
 
-                <!-- 如果开启评论功能 -->
+
+
+&gt; 2017-04-14 10:28:44.632 ERROR 6300 --- [nio-3331-exec-2] o.a.c.c.C.[.[.[/].[dispatcherServlet]    : Servlet.service() for servlet [dispatcherServlet] in context with path [] threw exception [Request processing failed; nested exception is org.apache.ibatis.binding.BindingException: Invalid bound statement (not found): com.cchuaspace.mapper.SuppliersCommodityMapper.insertSelective] with root cause
+
+&gt; org.apache.ibatis.binding.BindingException: Invalid bound statement (not found): com.cchuaspace.mapper.SuppliersCommodityMapper.insertSelective
+at org.apache.ibatis.binding.MapperMethod$SqlCommand.&lt;init&gt;(MapperMethod.java:230) ~[mybatis-3.4.2.jar:3.4.2]
+
+
+以为是自己反向生成xml文件的namespace没有和xml文件的package名称一一对应，后来发现并不是这么一回事
+
+于是便打开了垃圾Baidu，Dalao们的说法也是各种各样，xml没有编译进去、*Mapper.xml文件并没有发布到目标文件中、把*Mapper.xml文件夹放在resource文件夹下，什么在maven项目的pom.xml中build标签下插入路径，将src下所有xml文件引入编译；
+但是这些方法都不管用。
+</code></pre><p>##解决</p>
+<pre><code>第二天一早，我发现了是我MyBatis，并没有设置路径，原本在eclipse却读到了我所有的 *Mapper.xml （不知道什么原理……迷），于是我重新在把所有xml直接丢到resource，建了个mapper文件夹，在application添加bean，检查了在IDEA里面Project Structure -&gt; Modules 的resource到底有没设置为Resource类型，重启项目，新的风暴已经出现。顺利读取xml。
+</code></pre><hr>
+<p>世界上本没有坑，都是自己挖的！……</p>
+
+
+                <hr>
+
                 
-                    <hr>
-
-                    
-                    <!-- 多说评论框 start -->
-                    <div class="comment">
-                        <div class="ds-thread"
-                            data-thread-key="about/index.html"
-                            data-title="About"
-                            data-url="http://yoursite.com/about/index.html" >
-                        </div>
+                <!-- 多说 Share start -->
+                </style>
+                <div class="ds-share"
+                    style="text-align: right"
+                    data-thread-key="2017/04/14/Eclipse_To_Idea_mybatis_Eroor/"
+                    data-title="关于 eclipse 迁移到idea mybatis Xml出现 Invalid bound statement (not found) 的问题"
+                    data-url="http://yoursite.com/2017/04/14/Eclipse_To_Idea_mybatis_Eroor/"
+                    data-images=""
+                    data-content="搬了一台旧电脑到学校开发，应用一开多用eclipse真的卡的不行 于是想换一款开发软件，想起同... | Cchua的博客 | Cchua&#39;s Blog " >
+                    <div class="ds-share-inline">
+                      <ul  class="ds-share-icons-16">
+                        <li data-toggle="ds-share-icons-more"><a class="ds-more" href="#">分享到：</a></li>
+                        <li><a class="ds-wechat flat" href="javascript:void(0);" data-service="wechat">微信</a></li>
+                        <li><a class="ds-weibo flat" href="javascript:void(0);" data-service="weibo">微博</a></li>
+                        <li><a class="ds-douban flat" href="javascript:void(0);" data-service="douban">豆瓣</a></li>
+                      </ul>
+                      <div class="ds-share-icons-more">
+                      </div>
                     </div>
-                    <!-- 多说评论框 end -->
+                <hr>
+                </div>
+                <!-- 多说 Share end-->
+                
+
+                <ul class="pager">
                     
-
                     
-
-
+                        <li class="next">
+                            <a href="/2016/12/12/This_is_my_first_article/" data-toggle="tooltip" data-placement="top" title="This is my first article">Next Post &rarr;</a>
+                        </li>
                     
-                    <!-- 多说公共JS代码 start (一个网页只需插入一次) -->
-                    <script type="text/javascript">
-                        // dynamic User by Hux
-                        var _user = 'Cchua';
+                </ul>
 
-                        // duoshuo comment query.
-                        var duoshuoQuery = {short_name: _user };
-                        (function() {
-                            var ds = document.createElement('script');
-                            ds.type = 'text/javascript';ds.async = true;
-                            ds.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') + '//static.duoshuo.com/embed.js';
-                            ds.charset = 'UTF-8';
-                            (document.getElementsByTagName('head')[0]
-                             || document.getElementsByTagName('body')[0]).appendChild(ds);
-                        })();
-                    </script>
-                    <!-- 多说公共JS代码 end -->
-                    
-
-                    
-
-
+                
+                <!-- 多说评论框 start -->
+                <div class="comment">
+                    <div class="ds-thread"
+                        data-thread-key="2017/04/14/Eclipse_To_Idea_mybatis_Eroor/"
+                        data-title="关于 eclipse 迁移到idea mybatis Xml出现 Invalid bound statement (not found) 的问题"
+                        data-url="http://yoursite.com/2017/04/14/Eclipse_To_Idea_mybatis_Eroor/" >
+                    </div>
+                </div>
+                <!-- 多说评论框 end -->
+                
 
                 
 
             </div>
+    <!-- Side Catalog Container -->
+        
+
     <!-- Sidebar Container -->
+
             <div class="
-                col-lg-3 col-lg-offset-0
-                col-md-3 col-md-offset-0
-                col-sm-12
-                col-xs-12
-                sidebar-container
-            ">
+                col-lg-8 col-lg-offset-2
+                col-md-10 col-md-offset-1
+                sidebar-container">
+
                 <!-- Featured Tags -->
                 
                 <section>
                     <!-- no hr -->
                     <h5><a href="/tags/">FEATURED TAGS</a></h5>
                     <div class="tags">
+                       
+                          <a class="tag" href="/tags/#Spring" title="Spring">Spring</a>
                         
-                            
+                          <a class="tag" href="/tags/#MyBatis" title="MyBatis">MyBatis</a>
                         
-                            
+                          <a class="tag" href="/tags/#Web开发" title="Web开发">Web开发</a>
                         
-                            
-                        
-                            
-                        
-                            
-                        
-                            
-                        
-                            
-                        
-                            
+                          <a class="tag" href="/tags/#Java" title="Java">Java</a>
                         
                     </div>
                 </section>
                 
 
-                <!-- Short About -->
-                <section class="visible-md visible-lg">
-                    <hr><h5><a href="/about/">ABOUT ME</a></h5>
-                    <div class="short-about">
-
-                        
-                            <img src="/img/avatar.jpg" />
-                        
-
-                        
-                            <p>Time stopped at that moment</p>
-                        
-
-                        <!-- SNS Link -->
-                        <ul class="list-inline">
-                            
-                            
-                                <li>
-                                    <a target="_blank" href="https://twitter.com/vipcchua">
-                                        <span class="fa-stack fa-lg">
-                                            <i class="fa fa-circle fa-stack-2x"></i>
-                                            <i class="fa fa-twitter fa-stack-1x fa-inverse"></i>
-                                        </span>
-                                    </a>
-                                </li>
-                            
-                            
-                                <li>
-                                    <a target="_blank" href="https://www.zhihu.com/people/vipcchua">
-                                        <span class="fa-stack fa-lg">
-                                            <i class="fa fa-circle fa-stack-2x"></i>
-                                            <i class="fa  fa-stack-1x fa-inverse">知</i>
-                                        </span>
-                                    </a>
-                                </li>
-                            
-
-                            
-                                <li>
-                                    <a target="_blank" href="http://weibo.com/vipcchua">
-                                        <span class="fa-stack fa-lg">
-                                            <i class="fa fa-circle fa-stack-2x"></i>
-                                            <i class="fa fa-weibo fa-stack-1x fa-inverse"></i>
-                                        </span>
-                                    </a>
-                                </li>
-                            
-
-                            
-                                <li>
-                                    <a target="_blank" href="https://www.facebook.com/vipcchua">
-                                        <span class="fa-stack fa-lg">
-                                            <i class="fa fa-circle fa-stack-2x"></i>
-                                            <i class="fa fa-facebook fa-stack-1x fa-inverse"></i>
-                                        </span>
-                                    </a>
-                                </li>
-                            
-
-                            
-                                <li>
-                                    <a target="_blank"  href="https://github.com/vipcchua">
-                                        <span class="fa-stack fa-lg">
-                                            <i class="fa fa-circle fa-stack-2x"></i>
-                                            <i class="fa fa-github fa-stack-1x fa-inverse"></i>
-                                        </span>
-                                    </a>
-                                </li>
-                            
-                            
-                            
-                            
-                                <li>
-                                    <a target="_blank"  href="https://www.linkedin.com/in/Cchua-Sz">
-                                        <span class="fa-stack fa-lg">
-                                            <i class="fa fa-circle fa-stack-2x"></i>
-                                            <i class="fa fa-linkedin fa-stack-1x fa-inverse"></i>
-                                        </span>
-                                    </a>
-                                </li>
-                            
-                        </ul>
-                    </div>
-                </section>
-                
                 <!-- Friends Blog -->
                 
                 <hr>
@@ -367,9 +314,69 @@
                 </ul>
                 
             </div>
-        
+
+        </div>
     </div>
-</div>
+</article>
+
+
+<!-- 多说公共JS代码 start (一个网页只需插入一次) -->
+<script type="text/javascript">
+    // dynamic User by Hux
+    var _user = 'Cchua';
+
+    // duoshuo comment query.
+    var duoshuoQuery = {short_name: _user };
+    (function() {
+        var ds = document.createElement('script');
+        ds.type = 'text/javascript';ds.async = true;
+        ds.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') + '//static.duoshuo.com/embed.js';
+        ds.charset = 'UTF-8';
+        (document.getElementsByTagName('head')[0]
+         || document.getElementsByTagName('body')[0]).appendChild(ds);
+    })();
+</script>
+<!-- 多说公共JS代码 end -->
+
+
+
+
+
+
+<!-- async load function -->
+<script>
+    function async(u, c) {
+      var d = document, t = 'script',
+          o = d.createElement(t),
+          s = d.getElementsByTagName(t)[0];
+      o.src = u;
+      if (c) { o.addEventListener('load', function (e) { c(null, e); }, false); }
+      s.parentNode.insertBefore(o, s);
+    }
+</script>
+<!-- anchor-js, Doc:http://bryanbraun.github.io/anchorjs/ -->
+<script>
+    async("http://cdn.bootcss.com/anchor-js/1.1.1/anchor.min.js",function(){
+        anchors.options = {
+          visible: 'always',
+          placement: 'right',
+          icon: '#'
+        };
+        anchors.add().remove('.intro-header h1').remove('.subheading').remove('.sidebar-container h5');
+    })
+</script>
+<style>
+    /* place left on bigger screen */
+    @media all and (min-width: 800px) {
+        .anchorjs-link{
+            position: absolute;
+            left: -0.75em;
+            font-size: 1.1em;
+            margin-top : -0.1em;
+        }
+    }
+</style>
+
 
 
     <!-- Footer -->
