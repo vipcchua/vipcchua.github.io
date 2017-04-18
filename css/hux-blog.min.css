@@ -27,12 +27,12 @@
 }
 
 .sidebar-container a {
-	color: #7eb9ec!important;
+	color: #ffffff!important;
 }
 
 .sidebar-container a:hover,
 .sidebar-container a:active {
-	color: #ababab!important;
+	color: #ffffff!important;
 }
 
 .sidebar-container .tags a {
@@ -754,10 +754,9 @@ form .row:first-child .floating-label-form-group {
 .pager li>a:hover,
 .pager li>a:focus {
 	color: #fff;
-	background-color: white;
+	background-color: #4a81ff;
 	border: 1px solid white
 }
-
 .pager .disabled>a,
 .pager .disabled>a:hover,
 .pager .disabled>a:focus,
