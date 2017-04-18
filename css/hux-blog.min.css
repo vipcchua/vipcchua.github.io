@@ -32,9 +32,8 @@
 
 .sidebar-container a:hover,
 .sidebar-container a:active {
-	color: #ffffff!important;
+	color: #1e89f3!important;
 }
-
 .sidebar-container .tags a {
 	border-color: #ffffff;
 }
@@ -531,7 +530,7 @@ pre code {
 .post-preview>a:hover,
 .post-preview>a:focus {
 	text-decoration: none;
-	color: #37bad6;
+	color: #00fdff;
 }
 
 .post-preview>a>.post-title {
