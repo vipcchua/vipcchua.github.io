@@ -589,8 +589,9 @@ pre code {
 }
 
 .post-content-preview:hover {
-	color: #fb4296;
+	color: #ff8e8e;
 }
+
 
 @media only screen and (min-width:768px) {
 	.post-content-preview {
