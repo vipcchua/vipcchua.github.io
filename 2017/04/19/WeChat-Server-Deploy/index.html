@@ -13,11 +13,11 @@
 
     <title>
         
-          Cchua的博客 | Cchua&#39;s Blog
+          微信开发基本配置——服务器配置 - Cchua的博客 | Cchua&#39;s Blog
         
     </title>
 
-    <link rel="canonical" href="http://yoursite.com/tags/Hexo/">
+    <link rel="canonical" href="http://yoursite.com/2017/04/19/WeChat-Server-Deploy/">
 
     <!-- Bootstrap Core CSS -->
     <link rel="stylesheet" href="/css/bootstrap.min.css">
@@ -147,7 +147,234 @@
 
 
     <!-- Main Content -->
-    <!-- Default Archive layout, we use archives instead. -->
+    
+
+
+<!-- Post Header -->
+<style type="text/css">
+    header.intro-header{
+        background-image: url('/img/home-bg.jpg')
+    }
+</style>
+<header class="intro-header" >
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+                <div class="post-heading">
+                    <div class="tags">
+                        
+                          <a class="tag" href="/tags/#Web开发" title="Web开发">Web开发</a>
+                        
+                          <a class="tag" href="/tags/#Java" title="Java">Java</a>
+                        
+                          <a class="tag" href="/tags/#WeChat" title="WeChat">WeChat</a>
+                        
+                    </div>
+                    <h1>微信开发基本配置——服务器配置</h1>
+                    <h2 class="subheading"></h2>
+                    <span class="meta">
+                        Posted by Cchua on
+                        2017-04-19
+                    </span>
+                </div>
+            </div>
+        </div>
+    </div>
+</header>
+
+<!-- Post Content -->
+<article>
+    <div class="container">
+        <div class="row mybk">
+
+    <!-- Post Container -->
+            <div class="
+                col-lg-8 col-lg-offset-2
+                col-md-10 col-md-offset-1
+                post-container">
+
+                <p>　　最近在弄微信开发，这里讲下服务器的基本配置<br>　　<br>　　　<br>　　关于微信基本配置-服务器配置的启用
+　　
+　　</p>
+<h2 id="设置"><a href="#设置" class="headerlink" title="设置"></a>设置</h2><p>　　<br>     <a href="https://mp.weixin.qq.com/" target="_blank" rel="external">https://mp.weixin.qq.com/</a><br>　　<br>　　开发－＞基本配置－＞服务器配置－＞启用<br>　　<br>　　Url：设置自己要接入的URL （例:<a href="http://XXX.XXXcom/api/wechat/pushserver）" target="_blank" rel="external">http://XXX.XXXcom/api/wechat/pushserver）</a><br>　　<br>　　Token：自己随便填写<br>　　<br>　　EncodingAESKey：使用微信随机生成就好<br>　　<br>　　加解密方式：建议采用安全模式
+　　</p>
+<h2 id="接受的接口"><a href="#接受的接口" class="headerlink" title="接受的接口"></a>接受的接口</h2><p>　　<br>　　这采用java进行示范 根据：<a href="https://mp.weixin.qq.com/wiki" target="_blank" rel="external">https://mp.weixin.qq.com/wiki</a> 文档的描写<br>　　微信服务器将发送GET请求到填写的服务器地址URL上　　<br>　　我们只需要写好GET接口，并且把GET来的echostr回调，就可以通过他的设置！  
+　　</p>
+<h3 id="Java代码"><a href="#Java代码" class="headerlink" title="Java代码　　"></a>Java代码　　</h3><p>　　<br>　　&gt;  @RequestMapping(value = “/pushserver”, method = { RequestMethod.GET })</p>
+<pre><code>&gt;  @ResponseBody
+
+&gt;  public String validateserver(
+   &gt;       @RequestParam(value = &quot;signature&quot;, required = true) String signature,
+  &gt;       @RequestParam(value = &quot;timestamp&quot;, required = true) String timestamp,
+ &gt;        @RequestParam(value = &quot;nonce&quot;, required = true) String nonce,
+   &gt;      @RequestParam(value = &quot;echostr&quot;, required = true) String echostr
+</code></pre><blockquote>
+<p>   )  {</p>
+<p>　 return echostr;</p>
+<p> }</p>
+</blockquote>
+<hr>
+<p>世界上本没有坑，都是自己挖的！……</p>
+
+
+                <hr>
+
+                
+                <!-- 多说 Share start -->
+                </style>
+                <div class="ds-share"
+                    style="text-align: right"
+                    data-thread-key="2017/04/19/WeChat-Server-Deploy/"
+                    data-title="微信开发基本配置——服务器配置"
+                    data-url="http://yoursite.com/2017/04/19/WeChat-Server-Deploy/"
+                    data-images=""
+                    data-content="　　最近在弄微信开发，这里讲下服务器的基本配置　　　　　　　关于微信基本配置-服务器配置的启用... | Cchua的博客 | Cchua&#39;s Blog " >
+                    <div class="ds-share-inline">
+                      <ul  class="ds-share-icons-16">
+                        <li data-toggle="ds-share-icons-more"><a class="ds-more" href="#">分享到：</a></li>
+                        <li><a class="ds-wechat flat" href="javascript:void(0);" data-service="wechat">微信</a></li>
+                        <li><a class="ds-weibo flat" href="javascript:void(0);" data-service="weibo">微博</a></li>
+                        <li><a class="ds-douban flat" href="javascript:void(0);" data-service="douban">豆瓣</a></li>
+                      </ul>
+                      <div class="ds-share-icons-more">
+                      </div>
+                    </div>
+                <hr>
+                </div>
+                <!-- 多说 Share end-->
+                
+
+                <ul class="pager">
+                    
+                    
+                        <li class="next">
+                            <a href="/2017/04/19/Recommend-Postman/" data-toggle="tooltip" data-placement="top" title="实用的模拟请求——Postman">Next Post &rarr;</a>
+                        </li>
+                    
+                </ul>
+
+                
+                <!-- 多说评论框 start -->
+                <div class="comment">
+                    <div class="ds-thread"
+                        data-thread-key="2017/04/19/WeChat-Server-Deploy/"
+                        data-title="微信开发基本配置——服务器配置"
+                        data-url="http://yoursite.com/2017/04/19/WeChat-Server-Deploy/" >
+                    </div>
+                </div>
+                <!-- 多说评论框 end -->
+                
+
+                
+
+            </div>
+    <!-- Side Catalog Container -->
+        
+
+    <!-- Sidebar Container -->
+
+            <div class="
+                col-lg-8 col-lg-offset-2
+                col-md-10 col-md-offset-1
+                sidebar-container">
+
+                <!-- Featured Tags -->
+                
+                <section>
+                    <!-- no hr -->
+                    <h5><a href="/tags/">FEATURED TAGS</a></h5>
+                    <div class="tags">
+                       
+                          <a class="tag" href="/tags/#Web开发" title="Web开发">Web开发</a>
+                        
+                          <a class="tag" href="/tags/#Java" title="Java">Java</a>
+                        
+                          <a class="tag" href="/tags/#WeChat" title="WeChat">WeChat</a>
+                        
+                    </div>
+                </section>
+                
+
+                <!-- Friends Blog -->
+                
+                <hr>
+                <h5>FRIENDS</h5>
+                <ul class="list-inline">
+
+                    
+                        <li><a href="https://nbsaw.github.io" target="_blank">佳文四世</a></li>
+                    
+                        <li><a href="https://LonelyLiaR.github.io" target="_blank">Van漾</a></li>
+                    
+                        <li><a href="https://Hazlank.github.io" target="_blank">贝奥兰迪</a></li>
+                    
+                </ul>
+                
+            </div>
+
+        </div>
+    </div>
+</article>
+
+
+<!-- 多说公共JS代码 start (一个网页只需插入一次) -->
+<script type="text/javascript">
+    // dynamic User by Hux
+    var _user = 'Cchua';
+
+    // duoshuo comment query.
+    var duoshuoQuery = {short_name: _user };
+    (function() {
+        var ds = document.createElement('script');
+        ds.type = 'text/javascript';ds.async = true;
+        ds.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') + '//static.duoshuo.com/embed.js';
+        ds.charset = 'UTF-8';
+        (document.getElementsByTagName('head')[0]
+         || document.getElementsByTagName('body')[0]).appendChild(ds);
+    })();
+</script>
+<!-- 多说公共JS代码 end -->
+
+
+
+
+
+
+<!-- async load function -->
+<script>
+    function async(u, c) {
+      var d = document, t = 'script',
+          o = d.createElement(t),
+          s = d.getElementsByTagName(t)[0];
+      o.src = u;
+      if (c) { o.addEventListener('load', function (e) { c(null, e); }, false); }
+      s.parentNode.insertBefore(o, s);
+    }
+</script>
+<!-- anchor-js, Doc:http://bryanbraun.github.io/anchorjs/ -->
+<script>
+    async("http://cdn.bootcss.com/anchor-js/1.1.1/anchor.min.js",function(){
+        anchors.options = {
+          visible: 'always',
+          placement: 'right',
+          icon: '#'
+        };
+        anchors.add().remove('.intro-header h1').remove('.subheading').remove('.sidebar-container h5');
+    })
+</script>
+<style>
+    /* place left on bigger screen */
+    @media all and (min-width: 800px) {
+        .anchorjs-link{
+            position: absolute;
+            left: -0.75em;
+            font-size: 1.1em;
+            margin-top : -0.1em;
+        }
+    }
+</style>
+
+
 
     <!-- Footer -->
     <!-- Footer -->
