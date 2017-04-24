@@ -13,11 +13,11 @@
 
     <title>
         
-          Cchua的博客 | Cchua&#39;s Blog
+          微信开发——微信支付（公众号支付开发）——1 - Cchua的博客 | Cchua&#39;s Blog
         
     </title>
 
-    <link rel="canonical" href="http://yoursite.com/">
+    <link rel="canonical" href="http://yoursite.com/2017/04/19/WeChat-Pay/">
 
     <!-- Bootstrap Core CSS -->
     <link rel="stylesheet" href="/css/bootstrap.min.css">
@@ -147,343 +147,171 @@
 
 
     <!-- Main Content -->
-    <!-- Page Header -->
-<header class="intro-header" style="background-image: url('/img/home-bg.jpg')">
+    
+
+
+<!-- Post Header -->
+<style type="text/css">
+    header.intro-header{
+        background-image: url('/img/home-bg.jpg')
+    }
+</style>
+<header class="intro-header" >
     <div class="container">
-        <div class="row ">
-            <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1 ">
-                <div class="site-heading">
-                    <h1>Cchua&#39;s Blog</h1>
-                    <!--<hr class="small">-->
-                    <span class="subheading">To Be A Lean Developer!</span>
+        <div class="row">
+            <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+                <div class="post-heading">
+                    <div class="tags">
+                        
+                          <a class="tag" href="/tags/#Web开发" title="Web开发">Web开发</a>
+                        
+                          <a class="tag" href="/tags/#Java" title="Java">Java</a>
+                        
+                          <a class="tag" href="/tags/#WeChat" title="WeChat">WeChat</a>
+                        
+                    </div>
+                    <h1>微信开发——微信支付（公众号支付开发）——1</h1>
+                    <h2 class="subheading"></h2>
+                    <span class="meta">
+                        Posted by Cchua on
+                        2017-04-19
+                    </span>
                 </div>
             </div>
         </div>
     </div>
 </header>
 
+<!-- Post Content -->
+<article>
+    <div class="container">
+        <div class="row mybk">
 
-
-<!-- Main Content -->
-<div class="container">
-    <div class="row mybk">
-        
-
-<!-- USE SIDEBAR -->
     <!-- Post Container -->
             <div class="
-                col-lg-8 col-lg-offset-1
-                col-md-8 col-md-offset-1
-                col-sm-12
-                col-xs-12
-                post-container
-            ">
-            
-                <!-- Main Content -->
+                col-lg-8 col-lg-offset-2
+                col-md-10 col-md-offset-1
+                post-container">
 
-
-<div class="post-preview">
-
-    <a href="/2017/04/24/WeChat-Pay/">
-        <h2 class="post-title">
-            Untitled
-        </h2>
-        <h3 class="post-subtitle">
-            
-        </h3>
-        <div class="post-content-preview">
-            body {
-  width: 45em;
-  border: 1px solid #ddd;
-  outline: 1300px solid #fff;
-  margin: 16px auto;
-}
-
-body .markdown-body
-{
-  padding: 30px;
-}
-
-@font-face {
-  font-family: fontawesome-mini;
-  src: ......
-        </div>
-    </a>
-    <p class="post-meta">
-        Posted by Cchua Chen on
-        2017-04-24
-    </p>
-
-</div>
-<hr>
-
-<div class="post-preview">
-
-    <a href="/2017/04/19/Recommend-Postman/">
-        <h2 class="post-title">
-            实用的模拟请求——Postman
-        </h2>
-        <h3 class="post-subtitle">
-            
-        </h3>
-        <div class="post-content-preview">
-            　　　　　　一直以来测试的时候都用Js发送ajax请求来测试接口，玩起来真是累，无意中知道了一个插件Postman。只需要填上地址，参数，就可以快速模拟请求。　　该软件还集成了收藏接口和使用Google账户同步的功能真是大快人心！
-　　
-官网地址　　     https://www.getpostman.com/
+                <p>　　看到Tx的WeChatPay的文档真是无语了，感觉乱七八糟的……这里自己稍微整理下流程
+　　</p>
+<h2 id="设置"><a href="#设置" class="headerlink" title="设置"></a>设置</h2><p>　　<a href="https://pay.weixin.qq.com" target="_blank" rel="external">https://pay.weixin.qq.com</a><br>　　<br>　　在这取得<br>　　MchId－－商户号<br>　　apiKey－－商户Key<br>　　<br>　　<a href="https://mp.weixin.qq.com" target="_blank" rel="external">https://mp.weixin.qq.com</a><br>　　<br>　　在这取得<br>　　AppID－应用ID<br>　　<br>　　在页面的－＞微信支付－＞开发配置－＞公众号支付<br>　　<br>　　设置对应的支付授权目录、测试授权目录、已经将自己的微信号添加到白名单</p>
+<p>　　</p>
+<h2 id="统一下单"><a href="#统一下单" class="headerlink" title="统一下单"></a>统一下单</h2><p>　　</p>
+<h3 id="生成Sign值"><a href="#生成Sign值" class="headerlink" title="生成Sign值"></a>生成Sign值</h3><p>　　这采用java进行示范<br>　　根据文档的说明，首先我们要产生一张订单，WeChat的接口需要我们Post一段他们的XML给他们。<br>　　<br>　　在自己的商城生成了该订单的相关信息以后，首先我们要根据WeChat的Sign签名的生成签名，将要post过去除了sign以外的所有信息（一定是所有！这里特别强调下，我在这里给误导了好久以为只用把官方文档上要的Sign进行前面算法），进行官方的Sign签名算法（详情见微信文档），通过签名算法计算得出的签名值。
+　　</p>
+<h3 id="notify-url——异步接收微信支付结果通知的回调地址"><a href="#notify-url——异步接收微信支付结果通知的回调地址" class="headerlink" title="notify_url——异步接收微信支付结果通知的回调地址"></a>notify_url——异步接收微信支付结果通知的回调地址</h3><p>　　<br>　　既然是支付，支付成功以后，微信就要告诉你卖家已经支付成功，也就是支付结果的通知，notify_url 就是拿来设置微信在哪里告诉你买家已经支付成功的地方。
 　　
 　　
-　　
-　　个人推荐使用Chrome安装，直接发送到桌面快捷方式更省......
-        </div>
-    </a>
-    <p class="post-meta">
-        Posted by Cchua on
-        2017-04-19
-    </p>
+　　</p>
+<h3 id="发送订单信息"><a href="#发送订单信息" class="headerlink" title="发送订单信息"></a>发送订单信息</h3><p>　　当生成Sign的签名值生成和回调的接口设置好以后，我们将Xml信息整合在一起在后台Post到微信的接口上。这种时候时候微信会告诉你，订单时候生成是否成功，并且将微信支付订单的相关信息告诉你。　　<br>　　<br>　　<br>　　Post过去的信息举例如下：</p>
+<blockquote>
+ <xml><br> <appid>公众账号的ID</appid><br> <attach>支付测试</attach><br> <body>JSAPI支付测试</body><br> <mch_id>商户号</mch_id><br> <nonce_str>随机字符串</nonce_str><br> <notify_url>你要回调的地址接口</notify_url><br> <openid>用户标识-用户的openid</openid><br> <out_trade_no>你自己系统内部的订单号</out_trade_no><br> <spbill_create_ip>14.23.150.211</spbill_create_ip><br> <total_fee>1</total_fee><br> <trade_type>JSAPI</trade_type><br> <sign>你其他信息合在一起的sign签名值</sign><br> </xml><br>　　<br>  Post成功后微信会在后台生成微信支付订单<br>　　<br>　　回调的信息举例如下：<br>　　<br> <xml><br> <return_code>&lt;![CDATA[SUCCESS]]&gt;</return_code><br> <return_msg>&lt;![CDATA[OK]]&gt;</return_msg><br> <appid>&lt;![CDATA[wx2421b1c4370ec43b]]&gt;</appid>提交订单的公众账号ID<br> <mch_id>&lt;![CDATA[10000100]]&gt;</mch_id>提交订单的商户号<br> <nonce_str>&lt;![CDATA[IITRi8Iabbblz1Jc]]&gt;</nonce_str><br> <openid>&lt;![CDATA[oUpF8uMuAJO_M2pxb1Q9zNjWeS6o]]&gt;</openid><br> <sign>&lt;![CDATA[7921E432F65EB8ED0CE9755F0E86D72F]]&gt;</sign><br> <result_code>&lt;![CDATA[SUCCESS]]&gt;</result_code><br> <prepay_id>&lt;![CDATA[wx201411101639507cbf6ffd8b0779950874]]&gt;</prepay_id>微信生成的订单号<br> <trade_type>&lt;![CDATA[JSAPI]]&gt;</trade_type><br> </xml>
 
-</div>
+</blockquote>
+<h3 id="生成paySign，回调订单信息给网页端"><a href="#生成paySign，回调订单信息给网页端" class="headerlink" title="生成paySign，回调订单信息给网页端"></a>生成paySign，回调订单信息给网页端</h3><p>　　当支付订单生成以后，我们需要生成paySign，准备让网页端调用支付的API；将appId、<br>timeStamp、nonceStr、package（特别注意格式prepay_id=XXXX）、signType、进行paySign签名生成，生成的方法和Sign一样。之后将这些信息返回给网页端</p>
+<p>  　　</p>
+<h3 id="网页端调起支付API"><a href="#网页端调起支付API" class="headerlink" title="网页端调起支付API"></a>网页端调起支付API</h3><p>　　当支付订单生成以后，我们就可以让网页的调用起微信的支付界面了，我们需要将Post成功后的微信支付订单信息返回给网页端，并且由网页端调用起微信的支付界面。我们需要告诉网页端APPID，prepay_id</p>
+<p>—-待续 2017年4月24日16:35:14 未写完 </p>
+<p>当买家支付成功以后，微信会Psot一段信息到你的服务器上，这种时候我们就需要写一个接口，让微信进行Post，当支付买家支付成功以后，微信会通过一定的策略定期重新发起通知，尽可能提高通知的成功率，但微信他们不保证通知最终能成功。<br>　　<br>　　当我们收到这段信息以后，我们要回调一段信息，告诉微信我们已经收到支付成功的信息了！不用再发了！
+　　</p>
+<blockquote>
+ <xml><br> <return_code>&lt;![CDATA[SUCCESS]]&gt;</return_code><br> <return_msg>&lt;![CDATA[OK]]&gt;</return_msg><br> </xml>
+
+
+
+
+
+
+
+</blockquote>
 <hr>
-
-<div class="post-preview">
-
-    <a href="/2017/04/19/WeChat-Pay/">
-        <h2 class="post-title">
-            微信开发——微信支付（公众号支付开发）——1
-        </h2>
-        <h3 class="post-subtitle">
-            
-        </h3>
-        <div class="post-content-preview">
-            　　看到Tx的WeChatPay的文档真是无语了，感觉乱七八糟的……这里自己稍微整理下流程
-　　
-设置　　https://pay.weixin.qq.com　　　　在这取得　　MchId－－商户号　　apiKey－－商户Key　　　　https://mp.weixin.qq.com　　　　在这取得　　AppID－应用ID　　　　在页面的－＞微信支付－＞开发配置－＞公众号支付　　　　设置对应的......
-        </div>
-    </a>
-    <p class="post-meta">
-        Posted by Cchua on
-        2017-04-19
-    </p>
-
-</div>
-<hr>
-
-<div class="post-preview">
-
-    <a href="/2017/04/19/WeChat-Server-Deploy/">
-        <h2 class="post-title">
-            微信开发——服务器的基本配置
-        </h2>
-        <h3 class="post-subtitle">
-            
-        </h3>
-        <div class="post-content-preview">
-            　　最近在弄微信开发，这里讲下服务器的基本配置
-　　
-设置　　https://mp.weixin.qq.com/　　　　开发－＞基本配置－＞服务器配置－＞启用　　　　Url：设置自己要接入的URL （例:http://XXX.XXXcom/api/wechat/pushserver）　　　　Token：自己随便填写　　　　EncodingAESKey：使用微信随机生成就好　　　　加解密方式：......
-        </div>
-    </a>
-    <p class="post-meta">
-        Posted by Cchua on
-        2017-04-19
-    </p>
-
-</div>
-<hr>
-
-<div class="post-preview">
-
-    <a href="/2017/04/14/Eclipse_To_Idea_mybatis_Error/">
-        <h2 class="post-title">
-            关于 eclipse 迁移到idea mybatis Xml出现 Invalid bound statement (not found) 的问题
-        </h2>
-        <h3 class="post-subtitle">
-            
-        </h3>
-        <div class="post-content-preview">
-            　　搬了一台旧电脑到学校开发，应用一开多用eclipse真的卡的不行 于是想换一款开发软件，想起同学以前安利过idea，便开始给自己挖坑。
-正文　　我的项目采用了Spring-Boot+Mybatis，为了提高开发效率采用了mybatis-generator的反向生成代码生成了Xml，测试的时候突然间发现报错，我用注解写的语句可以正常运行，可是Xml的代码均出现了一下错误
-&gt; 2017......
-        </div>
-    </a>
-    <p class="post-meta">
-        Posted by Cchua on
-        2017-04-14
-    </p>
-
-</div>
-<hr>
-
-<div class="post-preview">
-
-    <a href="/2016/12/12/This_is_my_first_article/">
-        <h2 class="post-title">
-            This is my first article
-        </h2>
-        <h3 class="post-subtitle">
-            我的GitHub博客终于搭建完成了！
-        </h3>
-        <div class="post-content-preview">
-            我的Github博客终于搭建完成，本博客采用了Hexo搭建，基于hexo-theme-huxblog的主题进行修改
-https://github.com/Kaijun/hexo-theme-huxblog
-遇到的问题：
-1.有的主题的支持功能少，比如tags的标签的不支持2.多说的样式不好看，还是要自己修改的3.为了偷懒，看了很多主题，看到这款比较满意的进行了修改4.GitHub动态的显示，......
-        </div>
-    </a>
-    <p class="post-meta">
-        Posted by Cchua on
-        2016-12-12
-    </p>
-
-</div>
-<hr>
+<p>世界上本没有坑，都是自己挖的！……</p>
 
 
+                <hr>
 
-<!-- Pager -->
+                
+                <!-- 多说 Share start -->
+                </style>
+                <div class="ds-share"
+                    style="text-align: right"
+                    data-thread-key="2017/04/19/WeChat-Pay/"
+                    data-title="微信开发——微信支付（公众号支付开发）——1"
+                    data-url="http://yoursite.com/2017/04/19/WeChat-Pay/"
+                    data-images=""
+                    data-content="　　看到Tx的WeChatPay的文档真是无语了，感觉乱七八糟的……这里自己稍微整理下流程
+　... | Cchua的博客 | Cchua&#39;s Blog " >
+                    <div class="ds-share-inline">
+                      <ul  class="ds-share-icons-16">
+                        <li data-toggle="ds-share-icons-more"><a class="ds-more" href="#">分享到：</a></li>
+                        <li><a class="ds-wechat flat" href="javascript:void(0);" data-service="wechat">微信</a></li>
+                        <li><a class="ds-weibo flat" href="javascript:void(0);" data-service="weibo">微博</a></li>
+                        <li><a class="ds-douban flat" href="javascript:void(0);" data-service="douban">豆瓣</a></li>
+                      </ul>
+                      <div class="ds-share-icons-more">
+                      </div>
+                    </div>
+                <hr>
+                </div>
+                <!-- 多说 Share end-->
+                
 
-<ul class="pager">
-    
-    
-</ul>
+                <ul class="pager">
+                    
+                        <li class="previous">
+                            <a href="/2017/04/19/Recommend-Postman/" data-toggle="tooltip" data-placement="top" title="实用的模拟请求——Postman">&larr; Previous Post</a>
+                        </li>
+                    
+                    
+                        <li class="next">
+                            <a href="/2017/04/19/WeChat-Server-Deploy/" data-toggle="tooltip" data-placement="top" title="微信开发——服务器的基本配置">Next Post &rarr;</a>
+                        </li>
+                    
+                </ul>
 
+                
+                <!-- 多说评论框 start -->
+                <div class="comment">
+                    <div class="ds-thread"
+                        data-thread-key="2017/04/19/WeChat-Pay/"
+                        data-title="微信开发——微信支付（公众号支付开发）——1"
+                        data-url="http://yoursite.com/2017/04/19/WeChat-Pay/" >
+                    </div>
+                </div>
+                <!-- 多说评论框 end -->
+                
 
-
-                <!-- 如果开启评论功能 -->
                 
 
             </div>
+    <!-- Side Catalog Container -->
+        
+
     <!-- Sidebar Container -->
+
             <div class="
-                col-lg-3 col-lg-offset-0
-                col-md-3 col-md-offset-0
-                col-sm-12
-                col-xs-12
-                sidebar-container
-            ">
+                col-lg-8 col-lg-offset-2
+                col-md-10 col-md-offset-1
+                sidebar-container">
+
                 <!-- Featured Tags -->
                 
                 <section>
                     <!-- no hr -->
                     <h5><a href="/tags/">FEATURED TAGS</a></h5>
                     <div class="tags">
+                       
+                          <a class="tag" href="/tags/#Web开发" title="Web开发">Web开发</a>
                         
-                            
+                          <a class="tag" href="/tags/#Java" title="Java">Java</a>
                         
-                            
-                        
-                            
-                            <a href="/tags/#Web开发" title="Web开发" rel="4">Web开发</a>
-                            
-                        
-                            
-                        
-                            
-                        
-                            
-                        
-                            
-                        
-                            
-                        
-                            
-                        
-                            
-                            <a href="/tags/#Java" title="Java" rel="3">Java</a>
-                            
-                        
-                            
-                            <a href="/tags/#WeChat" title="WeChat" rel="2">WeChat</a>
-                            
+                          <a class="tag" href="/tags/#WeChat" title="WeChat">WeChat</a>
                         
                     </div>
                 </section>
                 
 
-                <!-- Short About -->
-                <section class="visible-md visible-lg">
-                    <hr><h5><a href="/about/">ABOUT ME</a></h5>
-                    <div class="short-about">
-
-                        
-                            <img src="/img/avatar.jpg" />
-                        
-
-                        
-                            <p>Time stopped at that moment</p>
-                        
-
-                        <!-- SNS Link -->
-                        <ul class="list-inline">
-                            
-                            
-                                <li>
-                                    <a target="_blank" href="https://twitter.com/vipcchua">
-                                        <span class="fa-stack fa-lg">
-                                            <i class="fa fa-circle fa-stack-2x"></i>
-                                            <i class="fa fa-twitter fa-stack-1x fa-inverse"></i>
-                                        </span>
-                                    </a>
-                                </li>
-                            
-                            
-                                <li>
-                                    <a target="_blank" href="https://www.zhihu.com/people/vipcchua">
-                                        <span class="fa-stack fa-lg">
-                                            <i class="fa fa-circle fa-stack-2x"></i>
-                                            <i class="fa  fa-stack-1x fa-inverse">知</i>
-                                        </span>
-                                    </a>
-                                </li>
-                            
-
-                            
-                                <li>
-                                    <a target="_blank" href="http://weibo.com/vipcchua">
-                                        <span class="fa-stack fa-lg">
-                                            <i class="fa fa-circle fa-stack-2x"></i>
-                                            <i class="fa fa-weibo fa-stack-1x fa-inverse"></i>
-                                        </span>
-                                    </a>
-                                </li>
-                            
-
-                            
-                                <li>
-                                    <a target="_blank" href="https://www.facebook.com/vipcchua">
-                                        <span class="fa-stack fa-lg">
-                                            <i class="fa fa-circle fa-stack-2x"></i>
-                                            <i class="fa fa-facebook fa-stack-1x fa-inverse"></i>
-                                        </span>
-                                    </a>
-                                </li>
-                            
-
-                            
-                                <li>
-                                    <a target="_blank"  href="https://github.com/vipcchua">
-                                        <span class="fa-stack fa-lg">
-                                            <i class="fa fa-circle fa-stack-2x"></i>
-                                            <i class="fa fa-github fa-stack-1x fa-inverse"></i>
-                                        </span>
-                                    </a>
-                                </li>
-                            
-                            
-                            
-                            
-                                <li>
-                                    <a target="_blank"  href="https://www.linkedin.com/in/Cchua-Sz">
-                                        <span class="fa-stack fa-lg">
-                                            <i class="fa fa-circle fa-stack-2x"></i>
-                                            <i class="fa fa-linkedin fa-stack-1x fa-inverse"></i>
-                                        </span>
-                                    </a>
-                                </li>
-                            
-                        </ul>
-                    </div>
-                </section>
-                
                 <!-- Friends Blog -->
                 
                 <hr>
@@ -500,9 +328,69 @@ https://github.com/Kaijun/hexo-theme-huxblog
                 </ul>
                 
             </div>
-        
+
+        </div>
     </div>
-</div>
+</article>
+
+
+<!-- 多说公共JS代码 start (一个网页只需插入一次) -->
+<script type="text/javascript">
+    // dynamic User by Hux
+    var _user = 'Cchua';
+
+    // duoshuo comment query.
+    var duoshuoQuery = {short_name: _user };
+    (function() {
+        var ds = document.createElement('script');
+        ds.type = 'text/javascript';ds.async = true;
+        ds.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') + '//static.duoshuo.com/embed.js';
+        ds.charset = 'UTF-8';
+        (document.getElementsByTagName('head')[0]
+         || document.getElementsByTagName('body')[0]).appendChild(ds);
+    })();
+</script>
+<!-- 多说公共JS代码 end -->
+
+
+
+
+
+
+<!-- async load function -->
+<script>
+    function async(u, c) {
+      var d = document, t = 'script',
+          o = d.createElement(t),
+          s = d.getElementsByTagName(t)[0];
+      o.src = u;
+      if (c) { o.addEventListener('load', function (e) { c(null, e); }, false); }
+      s.parentNode.insertBefore(o, s);
+    }
+</script>
+<!-- anchor-js, Doc:http://bryanbraun.github.io/anchorjs/ -->
+<script>
+    async("http://cdn.bootcss.com/anchor-js/1.1.1/anchor.min.js",function(){
+        anchors.options = {
+          visible: 'always',
+          placement: 'right',
+          icon: '#'
+        };
+        anchors.add().remove('.intro-header h1').remove('.subheading').remove('.sidebar-container h5');
+    })
+</script>
+<style>
+    /* place left on bigger screen */
+    @media all and (min-width: 800px) {
+        .anchorjs-link{
+            position: absolute;
+            left: -0.75em;
+            font-size: 1.1em;
+            margin-top : -0.1em;
+        }
+    }
+</style>
+
 
 
     <!-- Footer -->
