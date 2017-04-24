@@ -13,11 +13,11 @@
 
     <title>
         
-          This is my first article - Cchua的博客 | Cchua&#39;s Blog
+          微信开发——微信支付（公众号支付开发） - Cchua的博客 | Cchua&#39;s Blog
         
     </title>
 
-    <link rel="canonical" href="http://yoursite.com/2016/12/12/This_is_my_first_article/">
+    <link rel="canonical" href="http://yoursite.com/2017/04/24/WeChat-Pay/">
 
     <!-- Bootstrap Core CSS -->
     <link rel="stylesheet" href="/css/bootstrap.min.css">
@@ -163,20 +163,18 @@
                 <div class="post-heading">
                     <div class="tags">
                         
-                          <a class="tag" href="/tags/#Hexo" title="Hexo">Hexo</a>
+                          <a class="tag" href="/tags/#Web开发" title="Web开发">Web开发</a>
                         
-                          <a class="tag" href="/tags/#Life" title="Life">Life</a>
+                          <a class="tag" href="/tags/#Java" title="Java">Java</a>
                         
-                          <a class="tag" href="/tags/#前端开发" title="前端开发">前端开发</a>
-                        
-                          <a class="tag" href="/tags/#JavaScript" title="JavaScript">JavaScript</a>
+                          <a class="tag" href="/tags/#WeChat" title="WeChat">WeChat</a>
                         
                     </div>
-                    <h1>This is my first article</h1>
-                    <h2 class="subheading">我的GitHub博客终于搭建完成了！</h2>
+                    <h1>微信开发——微信支付（公众号支付开发）</h1>
+                    <h2 class="subheading"></h2>
                     <span class="meta">
                         Posted by Cchua on
-                        2016-12-12
+                        2017-04-24
                     </span>
                 </div>
             </div>
@@ -195,11 +193,36 @@
                 col-md-10 col-md-offset-1
                 post-container">
 
-                <p>我的Github博客终于搭建完成，本博客采用了Hexo搭建，基于hexo-theme-huxblog的主题进行修改</p>
-<p><a href="https://github.com/Kaijun/hexo-theme-huxblog" target="_blank" rel="external">https://github.com/Kaijun/hexo-theme-huxblog</a></p>
-<p>遇到的问题：</p>
-<p>1.有的主题的支持功能少，比如tags的标签的不支持<br>2.多说的样式不好看，还是要自己修改的<br>3.为了偷懒，看了很多主题，看到这款比较满意的进行了修改<br>4.GitHub动态的显示，可以用以下网址来获取到，分别是用户名，项目名，type，count</p>
-<p><a href="https://ghbtns.com/github-btn.html?user=vipcchua&amp;repo=vipcchua.github.io&amp;type=star&amp;count=true" target="_blank" rel="external">https://ghbtns.com/github-btn.html?user=vipcchua&amp;repo=vipcchua.github.io&amp;type=star&amp;count=true</a></p>
+                <p>　　看到Tx的WeChatPay的文档真是无语了，感觉乱七八糟的……这里自己稍微整理下流程
+　　</p>
+<h2 id="设置"><a href="#设置" class="headerlink" title="设置"></a>设置</h2><p>　　<a href="https://pay.weixin.qq.com" target="_blank" rel="external">https://pay.weixin.qq.com</a><br>　　<br>　　在这取得<br>　　MchId－－商户号<br>　　apiKey－－商户Key<br>　　<br>　　<a href="https://mp.weixin.qq.com" target="_blank" rel="external">https://mp.weixin.qq.com</a><br>　　<br>　　在这取得<br>　　AppID－应用ID<br>　　<br>　　在页面的－＞微信支付－＞开发配置－＞公众号支付<br>　　<br>　　设置对应的支付授权目录、测试授权目录、已经将自己的微信号添加到白名单</p>
+<p>　　</p>
+<h2 id="统一下单"><a href="#统一下单" class="headerlink" title="统一下单"></a>统一下单</h2><p>　　买家在在提交订单以后，将向微信生成支付订单，在微信生成支付订单；</p>
+<h3 id="生成Sign值"><a href="#生成Sign值" class="headerlink" title="生成Sign值"></a>生成Sign值</h3><p>　　根据文档的说明，我们要产生一张订单，WeChat的接口需要我们Post一段带有订单信息的XML给他们。<br>　　<br>　　在自己的商城生成了该订单的相关信息以后，首先我们要根据WeChat的Sign签名算法的生成签名，将要post过去除了sign以外的所有信息（一定是所有！这里特别强调下，我在这里给误导了好久以为只用把官方文档上要的Sign进行前面算法），进行官方的Sign签名算法（详情见微信文档），通过签名算法计算得出的签名值。
+　　</p>
+<h3 id="notify-url——异步接收微信支付结果通知的回调地址"><a href="#notify-url——异步接收微信支付结果通知的回调地址" class="headerlink" title="notify_url——异步接收微信支付结果通知的回调地址"></a>notify_url——异步接收微信支付结果通知的回调地址</h3><p>　　<br>　　既然是支付，支付成功以后，微信就要告诉你卖家已经支付成功，也就是支付结果的通知，notify_url 就是拿来设置微信在哪里告诉你买家已经支付成功的地方。
+　　
+　　
+　　</p>
+<h3 id="后台发送订单信息"><a href="#后台发送订单信息" class="headerlink" title="后台发送订单信息"></a>后台发送订单信息</h3><p>　　当生成Sign的签名值生成和回调的接口设置好以后，后台需要发送订单要生成的订单信息，并接受生成好订单信息；后台需要将Xml信息整合在一起在后台Post到微信的接口上，并且接收回调信息，这是他会告诉你订单是否接受成功，并且把微信支付订单的相关信息告诉你。　　<br>　　<br>　　<br>　　Post过去的信息举例如下：</p>
+<blockquote>
+ <xml><br> <appid>公众账号的ID</appid><br> <attach>支付测试</attach><br> <body>JSAPI支付测试</body><br> <mch_id>商户号</mch_id><br> <nonce_str>随机字符串</nonce_str><br> <notify_url>你要回调的地址接口</notify_url><br> <openid>用户标识-用户的openid</openid><br> <out_trade_no>你自己系统内部的订单号</out_trade_no><br> <spbill_create_ip>14.23.150.211</spbill_create_ip><br> <total_fee>1</total_fee><br> <trade_type>JSAPI</trade_type><br> <sign>你其他信息合在一起的sign签名值</sign><br> </xml><br>　　<br>  Post成功后微信会在后台生成微信支付订单<br>　　<br>　　回调的信息举例如下：<br>　　<br> <xml><br> <return_code>&lt;![CDATA[SUCCESS]]&gt;</return_code><br> <return_msg>&lt;![CDATA[OK]]&gt;</return_msg><br> <appid>&lt;![CDATA[wx2421b1c4370ec43b]]&gt;</appid>提交订单的公众账号ID<br> <mch_id>&lt;![CDATA[10000100]]&gt;</mch_id>提交订单的商户号<br> <nonce_str>&lt;![CDATA[IITRi8Iabbblz1Jc]]&gt;</nonce_str><br> <openid>&lt;![CDATA[oUpF8uMuAJO_M2pxb1Q9zNjWeS6o]]&gt;</openid><br> <sign>&lt;![CDATA[7921E432F65EB8ED0CE9755F0E86D72F]]&gt;</sign><br> <result_code>&lt;![CDATA[SUCCESS]]&gt;</result_code><br> <prepay_id>&lt;![CDATA[wx201411101639507cbf6ffd8b0779950874]]&gt;</prepay_id>微信生成的订单号<br> <trade_type>&lt;![CDATA[JSAPI]]&gt;</trade_type><br> </xml>
+
+</blockquote>
+<h3 id="生成paySign，回调订单信息给网页端"><a href="#生成paySign，回调订单信息给网页端" class="headerlink" title="生成paySign，回调订单信息给网页端"></a>生成paySign，回调订单信息给网页端</h3><p>　　当支付订单生成以后，我们需要生成paySign，准备让网页端调用支付的API；将appId、<br>timeStamp、nonceStr、package（特别注意格式prepay_id=XXXX）、signType、进行paySign签名生成，生成的方法和Sign一样。之后将这些信息返回给网页端；</p>
+<p>  　　</p>
+<h3 id="网页端调起支付API"><a href="#网页端调起支付API" class="headerlink" title="网页端调起支付API"></a>网页端调起支付API</h3><p>　　当支付订单生成以后，我们得到了加密的PaySign，将appI、timeStamp、nonceStr、package、signType、paySign填写正确以后，微信将调用支付页面，买家将可以进行付款</p>
+<h3 id="接受支付成功信息"><a href="#接受支付成功信息" class="headerlink" title="接受支付成功信息"></a>接受支付成功信息</h3><p>　　当买家支付成功以后，微信会Psot一段信息到你的服务器上，之前notify_url——就是异步接收微信支付结果通知的回调地址，这种时候我们就需要写一个接口，让微信把支付成功的数据Post过来，我们需要接收处理这段数据，当收到通知进行处理时，首先检查对应业务数据的状态，判断该通知是否已经处理过，如果没有处理过再进行处理，如果处理过直接返回结果成功。<br>　　<br>　　当我们收到这段信息以后，我们要回调一段信息，告诉微信我们已经收到支付成功的信息了！不用再发了！
+　　</p>
+<blockquote>
+ <xml><br> <return_code>&lt;![CDATA[SUCCESS]]&gt;</return_code><br> <return_msg>&lt;![CDATA[OK]]&gt;</return_msg><br> </xml>
+
+
+</blockquote>
+<p>　　否则微信会通过一定的策略定期重新发起通知（通知频率为15/15/30/180/1800/1800/1800/1800/3600，单位：秒），</p>
+<p>　　之后就是自己的业务信息处理了。～<br>　　<br>　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　————完</p>
+<hr>
+<p>世界上本没有坑，都是自己挖的！……</p>
 
 
                 <hr>
@@ -209,11 +232,12 @@
                 </style>
                 <div class="ds-share"
                     style="text-align: right"
-                    data-thread-key="2016/12/12/This_is_my_first_article/"
-                    data-title="This is my first article"
-                    data-url="http://yoursite.com/2016/12/12/This_is_my_first_article/"
+                    data-thread-key="2017/04/24/WeChat-Pay/"
+                    data-title="微信开发——微信支付（公众号支付开发）"
+                    data-url="http://yoursite.com/2017/04/24/WeChat-Pay/"
                     data-images=""
-                    data-content="我的Github博客终于搭建完成，本博客采用了Hexo搭建，基于hexo-theme-huxb... | Cchua的博客 | Cchua&#39;s Blog " >
+                    data-content="　　看到Tx的WeChatPay的文档真是无语了，感觉乱七八糟的……这里自己稍微整理下流程
+　... | Cchua的博客 | Cchua&#39;s Blog " >
                     <div class="ds-share-inline">
                       <ul  class="ds-share-icons-16">
                         <li data-toggle="ds-share-icons-more"><a class="ds-more" href="#">分享到：</a></li>
@@ -231,10 +255,10 @@
 
                 <ul class="pager">
                     
-                        <li class="previous">
-                            <a href="/2017/04/14/Eclipse_To_Idea_mybatis_Error/" data-toggle="tooltip" data-placement="top" title="关于 eclipse 迁移到idea mybatis Xml出现 Invalid bound statement (not found) 的问题">&larr; Previous Post</a>
-                        </li>
                     
+                        <li class="next">
+                            <a href="/2017/04/19/Recommend-Postman/" data-toggle="tooltip" data-placement="top" title="实用的模拟请求——Postman">Next Post &rarr;</a>
+                        </li>
                     
                 </ul>
 
@@ -242,9 +266,9 @@
                 <!-- 多说评论框 start -->
                 <div class="comment">
                     <div class="ds-thread"
-                        data-thread-key="2016/12/12/This_is_my_first_article/"
-                        data-title="This is my first article"
-                        data-url="http://yoursite.com/2016/12/12/This_is_my_first_article/" >
+                        data-thread-key="2017/04/24/WeChat-Pay/"
+                        data-title="微信开发——微信支付（公众号支付开发）"
+                        data-url="http://yoursite.com/2017/04/24/WeChat-Pay/" >
                     </div>
                 </div>
                 <!-- 多说评论框 end -->
@@ -270,13 +294,11 @@
                     <h5><a href="/tags/">FEATURED TAGS</a></h5>
                     <div class="tags">
                        
-                          <a class="tag" href="/tags/#Hexo" title="Hexo">Hexo</a>
+                          <a class="tag" href="/tags/#Web开发" title="Web开发">Web开发</a>
                         
-                          <a class="tag" href="/tags/#Life" title="Life">Life</a>
+                          <a class="tag" href="/tags/#Java" title="Java">Java</a>
                         
-                          <a class="tag" href="/tags/#前端开发" title="前端开发">前端开发</a>
-                        
-                          <a class="tag" href="/tags/#JavaScript" title="JavaScript">JavaScript</a>
+                          <a class="tag" href="/tags/#WeChat" title="WeChat">WeChat</a>
                         
                     </div>
                 </section>
