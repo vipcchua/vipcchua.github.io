@@ -97,14 +97,14 @@
 
                         
                         <li>
-                            <a href="/tags/">Tags</a>
+                            <a href="/about/">About</a>
                         </li>
                         
                     
 
                         
                         <li>
-                            <a href="/about/">About</a>
+                            <a href="/tags/">Tags</a>
                         </li>
                         
                     
@@ -193,27 +193,25 @@
                 col-md-10 col-md-offset-1
                 post-container">
 
-                <p>　　最近在弄微信开发，这里讲下服务器的基本配置<br>　　<br>　　　<br>　　关于微信基本配置-服务器配置的启用
+                <p>　　最近在弄微信开发，这里讲下服务器的基本配置<br>　　<br>　　关于微信基本配置-服务器配置的启用
 　　
 　　</p>
 <h2 id="设置"><a href="#设置" class="headerlink" title="设置"></a>设置</h2><p>　　<br>     <a href="https://mp.weixin.qq.com/" target="_blank" rel="external">https://mp.weixin.qq.com/</a><br>　　<br>　　开发－＞基本配置－＞服务器配置－＞启用<br>　　<br>　　Url：设置自己要接入的URL （例:<a href="http://XXX.XXXcom/api/wechat/pushserver）" target="_blank" rel="external">http://XXX.XXXcom/api/wechat/pushserver）</a><br>　　<br>　　Token：自己随便填写<br>　　<br>　　EncodingAESKey：使用微信随机生成就好<br>　　<br>　　加解密方式：建议采用安全模式
 　　</p>
-<h2 id="接受的接口"><a href="#接受的接口" class="headerlink" title="接受的接口"></a>接受的接口</h2><p>　　<br>　　这采用java进行示范 根据：<a href="https://mp.weixin.qq.com/wiki" target="_blank" rel="external">https://mp.weixin.qq.com/wiki</a> 文档的描写<br>　　微信服务器将发送GET请求到填写的服务器地址URL上　　<br>　　我们只需要写好GET接口，并且把GET来的echostr回调，就可以通过他的设置！  
+<h2 id="接口"><a href="#接口" class="headerlink" title="接口"></a>接口</h2><p>　　<br>　　这采用java进行示范 根据：<a href="https://mp.weixin.qq.com/wiki" target="_blank" rel="external">https://mp.weixin.qq.com/wiki</a> 文档的描写<br>　　微信服务器将发送GET请求到填写的服务器地址URL上　　<br>　　我们只需要写好GET接口，并且把GET来的echostr回调，就可以通过他的设置！  
 　　</p>
-<h3 id="Java代码"><a href="#Java代码" class="headerlink" title="Java代码　　"></a>Java代码　　</h3><p>　　<br>　　&gt;  @RequestMapping(value = “/pushserver”, method = { RequestMethod.GET })</p>
-<pre><code>&gt;  @ResponseBody
-
+<h3 id="Java代码"><a href="#Java代码" class="headerlink" title="Java代码　　"></a>Java代码　　</h3><p>　　</p>
+<pre><code>&gt;  @RequestMapping(value = &quot;/pushserver&quot;, method = { RequestMethod.GET })
+&gt;  @ResponseBody
 &gt;  public String validateserver(
-   &gt;       @RequestParam(value = &quot;signature&quot;, required = true) String signature,
-  &gt;       @RequestParam(value = &quot;timestamp&quot;, required = true) String timestamp,
- &gt;        @RequestParam(value = &quot;nonce&quot;, required = true) String nonce,
-   &gt;      @RequestParam(value = &quot;echostr&quot;, required = true) String echostr
-</code></pre><blockquote>
-<p>   )  {</p>
-<p>　 return echostr;</p>
-<p> }</p>
-</blockquote>
-<hr>
+&gt;   @RequestParam(value = &quot;signature&quot;, required = true) String signature,
+&gt;  @RequestParam(value = &quot;timestamp&quot;, required = true) String timestamp,
+&gt;   @RequestParam(value = &quot;nonce&quot;, required = true) String nonce,
+&gt;  @RequestParam(value = &quot;echostr&quot;, required = true) String echostr
+&gt;  )  {
+&gt;  return echostr;
+&gt;  }
+</code></pre><hr>
 <p>世界上本没有坑，都是自己挖的！……</p>
 
 
@@ -228,7 +226,8 @@
                     data-title="微信开发基本配置——服务器配置"
                     data-url="http://yoursite.com/2017/04/19/WeChat-Server-Deploy/"
                     data-images=""
-                    data-content="　　最近在弄微信开发，这里讲下服务器的基本配置　　　　　　　关于微信基本配置-服务器配置的启用... | Cchua的博客 | Cchua&#39;s Blog " >
+                    data-content="　　最近在弄微信开发，这里讲下服务器的基本配置　　　　关于微信基本配置-服务器配置的启用
+　　... | Cchua的博客 | Cchua&#39;s Blog " >
                     <div class="ds-share-inline">
                       <ul  class="ds-share-icons-16">
                         <li data-toggle="ds-share-icons-more"><a class="ds-more" href="#">分享到：</a></li>
