@@ -90,14 +90,14 @@
 
                         
                         <li>
-                            <a href="/tags/">Tags</a>
+                            <a href="/about/">About</a>
                         </li>
                         
                     
 
                         
                         <li>
-                            <a href="/about/">About</a>
+                            <a href="/tags/">Tags</a>
                         </li>
                         
                     
@@ -212,7 +212,7 @@
 <h3 id="接受支付成功信息"><a href="#接受支付成功信息" class="headerlink" title="接受支付成功信息"></a>接受支付成功信息</h3><p>　　当买家支付成功以后，微信会Psot一段信息到你的服务器上，之前notify_url——就是异步接收微信支付结果通知的回调地址，这种时候就需要写一个接口，让微信把支付成功的数据Post过来，我们需要接收处理这段数据，当收到通知进行处理时，首先检查对应业务数据的状态，判断该通知是否已经处理过，如果没有处理过再进行处理，如果处理过直接返回结果成功。<br>　　<br>　　当收到这段信息以后，需要回调一段信息，告诉微信已经收到支付成功的信息了！不用再发了！<br>　　<br><figure class="highlight xml"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line"><span class="tag">&lt;<span class="name">xml</span>&gt;</span></div><div class="line"><span class="tag">&lt;<span class="name">return_code</span>&gt;</span>&lt;![CDATA[SUCCESS]]&gt;<span class="tag">&lt;/<span class="name">return_code</span>&gt;</span></div><div class="line"><span class="tag">&lt;<span class="name">return_msg</span>&gt;</span>&lt;![CDATA[OK]]&gt;<span class="tag">&lt;/<span class="name">return_msg</span>&gt;</span></div><div class="line"><span class="tag">&lt;/<span class="name">xml</span>&gt;</span></div></pre></td></tr></table></figure></p>
 <p>　　否则微信会通过一定的策略定期重新发起通知（通知频率为15/15/30/180/1800/1800/1800/1800/3600，单位：秒），</p>
 <p>　　告诉微信收到支付信息的同时，我们就可以处理其他业务信息了。～</p>
-<figure class="highlight dust"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div></pre></td><td class="code"><pre><div class="line"><span class="xml">    @RequestMapping(value = "/payresponse", method = RequestMethod.POST)</span></div><div class="line">    @ResponseBody</div><div class="line">  public String Payresponse(@RequestBody String PayResponse) <span class="template-variable">&#123;</span></div><div class="line"></div><div class="line">                public void run()&#123;</div><div class="line"></div><div class="line">                    /*开多个处理其他业*/</div><div class="line">                 </div><div class="line">                &#125;<span class="xml"></span></div><div class="line">   </div><div class="line">        String WXresult = "<span class="tag">&lt;<span class="name">xml</span>&gt;</span><span class="tag">&lt;<span class="name">return_code</span>&gt;</span>&lt;![CDATA[SUCCESS]]&gt;<span class="tag">&lt;/<span class="name">return_code</span>&gt;</span><span class="tag">&lt;<span class="name">return_msg</span>&gt;</span>&lt;![CDATA[OK]]&gt;<span class="tag">&lt;/<span class="name">return_msg</span>&gt;</span><span class="tag">&lt;/<span class="name">xml</span>&gt;</span>";</div><div class="line"></div><div class="line">        return WXresult;</div><div class="line"></div><div class="line">    &#125;</div><div class="line"></div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<figure class="highlight dust"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div></pre></td><td class="code"><pre><div class="line"><span class="xml">    @RequestMapping(value = "/payresponse", method = RequestMethod.POST)</span></div><div class="line">    @ResponseBody</div><div class="line">  public String Payresponse(@RequestBody String PayResponse) <span class="template-variable">&#123;</span></div><div class="line"></div><div class="line">                public void run()&#123;</div><div class="line"></div><div class="line">                    /*开多个处理其他业务*/</div><div class="line">                 </div><div class="line">                &#125;<span class="xml"></span></div><div class="line">   </div><div class="line">        String WXresult = "<span class="tag">&lt;<span class="name">xml</span>&gt;</span><span class="tag">&lt;<span class="name">return_code</span>&gt;</span>&lt;![CDATA[SUCCESS]]&gt;<span class="tag">&lt;/<span class="name">return_code</span>&gt;</span><span class="tag">&lt;<span class="name">return_msg</span>&gt;</span>&lt;![CDATA[OK]]&gt;<span class="tag">&lt;/<span class="name">return_msg</span>&gt;</span><span class="tag">&lt;/<span class="name">xml</span>&gt;</span>";</div><div class="line"></div><div class="line">        return WXresult;</div><div class="line"></div><div class="line">    &#125;</div><div class="line"></div><div class="line">&#125;</div></pre></td></tr></table></figure>
 <p>　　<br>　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　————完</p>
 <hr>
 <p>世界上本没有坑，都是自己挖的！……</p>
@@ -250,7 +250,7 @@
                     
                     
                         <li class="next">
-                            <a href="/2017/04/19/Recommend-Postman/" data-toggle="tooltip" data-placement="top" title="实用的模拟请求——Postman">Next Post &rarr;</a>
+                            <a href="/2017/04/19/WeChat-Server-Deploy/" data-toggle="tooltip" data-placement="top" title="微信开发——服务器的基本配置">Next Post &rarr;</a>
                         </li>
                     
                 </ul>
