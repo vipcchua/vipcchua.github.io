@@ -90,6 +90,13 @@
 
                         
                         <li>
+                            <a href="/archives/">Archives</a>
+                        </li>
+                        
+                    
+
+                        
+                        <li>
                             <a href="/about/">About</a>
                         </li>
                         
@@ -98,13 +105,6 @@
                         
                         <li>
                             <a href="/tags/">Tags</a>
-                        </li>
-                        
-                    
-
-                        
-                        <li>
-                            <a href="/archives/">Archives</a>
                         </li>
                         
                     
@@ -193,8 +193,11 @@
                 col-md-10 col-md-offset-1
                 post-container">
 
-                <p>　　看到Tx的WeChatPay的文档真是无语了，感觉乱七八糟的……这里自己稍微整理下流程
+                <p>　　<br>　　<br>　　看到Tx的WeChatPay的文档真是无语了，感觉乱七八糟的……这里自己稍微整理下我的流程。这里的业务流程主要针对于公众号支付
+　　
+　　
 　　</p>
+<p>　　</p>
 <h2 id="设置"><a href="#设置" class="headerlink" title="设置"></a>设置</h2><p>　　<a href="https://pay.weixin.qq.com" target="_blank" rel="external">https://pay.weixin.qq.com</a><br>　　<br>　　在这取得<br>　　MchId－－商户号<br>　　apiKey－－商户Key<br>　　<br>　　<a href="https://mp.weixin.qq.com" target="_blank" rel="external">https://mp.weixin.qq.com</a><br>　　<br>　　在这取得<br>　　AppID－应用ID<br>　　<br>　　在页面的－＞微信支付－＞开发配置－＞公众号支付<br>　　<br>　　设置对应的支付授权目录、测试授权目录、已经将自己的微信号添加到白名单</p>
 <p>　　</p>
 <h2 id="统一下单"><a href="#统一下单" class="headerlink" title="统一下单"></a>统一下单</h2><p>　　买家在在提交订单以后，将向微信生成支付订单，在微信生成支付订单；</p>
@@ -209,6 +212,7 @@
 <h3 id="生成paySign，回调订单信息给网页端"><a href="#生成paySign，回调订单信息给网页端" class="headerlink" title="生成paySign，回调订单信息给网页端"></a>生成paySign，回调订单信息给网页端</h3><p>　　当支付订单生成以后，需要生成paySign给网页端，准备让网页端调用支付的API；将appId、<br>timeStamp、nonceStr、package（特别注意格式prepay_id=XXXX）、signType、进行paySign签名生成，生成的方法和Sign一样。之后将这些信息返回给网页端；</p>
 <p>  　　</p>
 <h3 id="网页端调起支付API"><a href="#网页端调起支付API" class="headerlink" title="网页端调起支付API"></a>网页端调起支付API</h3><p>　　当支付订单生成以后，得到了加密的PaySign以后，将appI、timeStamp、nonceStr、package、signType、paySign填写正确以后，微信将调用支付页面，买家将可以进行付款</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="keyword">function</span> <span class="title">onBridgeReady</span>(<span class="params"></span>)</span>&#123;</div><div class="line">   WeixinJSBridge.invoke(</div><div class="line">       <span class="string">'getBrandWCPayRequest'</span>, &#123;  <span class="comment">//以下都是后台处理好的信息，相当于支付的订单信息 </span></div><div class="line">           <span class="string">"appId"</span>:<span class="string">"wx2421b1c4370ec43b"</span>,     </div><div class="line">           <span class="string">"timeStamp"</span>:<span class="string">"1395712654"</span>,           </div><div class="line">           <span class="string">"nonceStr"</span>:<span class="string">"e61463f8efa94090b1f366cccfbbb444"</span>, </div><div class="line">           <span class="string">"package"</span>:<span class="string">"prepay_id=u802345jgfjsdfgsdg888"</span>,     </div><div class="line">           <span class="string">"signType"</span>:<span class="string">"MD5"</span>,      </div><div class="line">           <span class="string">"paySign"</span>:<span class="string">"70EA570631E4BB79628FBCA90534C63FF7FADD89"</span> </div><div class="line">       &#125;,</div><div class="line">       <span class="function"><span class="keyword">function</span>(<span class="params">res</span>)</span>&#123;     </div><div class="line">           <span class="keyword">if</span>(res.err_msg == <span class="string">"get_brand_wcpay_request:ok"</span> ) &#123;&#125;     </div><div class="line">       &#125;</div><div class="line">   ); </div><div class="line">&#125;</div><div class="line"><span class="keyword">if</span> (<span class="keyword">typeof</span> WeixinJSBridge == <span class="string">"undefined"</span>)&#123;</div><div class="line">   <span class="keyword">if</span>( <span class="built_in">document</span>.addEventListener )&#123;</div><div class="line">       <span class="built_in">document</span>.addEventListener(<span class="string">'WeixinJSBridgeReady'</span>, onBridgeReady, <span class="literal">false</span>);</div><div class="line">   &#125;<span class="keyword">else</span> <span class="keyword">if</span> (<span class="built_in">document</span>.attachEvent)&#123;</div><div class="line">       <span class="built_in">document</span>.attachEvent(<span class="string">'WeixinJSBridgeReady'</span>, onBridgeReady); </div><div class="line">       <span class="built_in">document</span>.attachEvent(<span class="string">'onWeixinJSBridgeReady'</span>, onBridgeReady);</div><div class="line">   &#125;</div><div class="line">&#125;<span class="keyword">else</span>&#123;</div><div class="line">   onBridgeReady();</div><div class="line">&#125;</div></pre></td></tr></table></figure>
 <h3 id="接受支付成功信息"><a href="#接受支付成功信息" class="headerlink" title="接受支付成功信息"></a>接受支付成功信息</h3><p>　　当买家支付成功以后，微信会Psot一段信息到你的服务器上，之前notify_url——就是异步接收微信支付结果通知的回调地址，这种时候就需要写一个接口，让微信把支付成功的数据Post过来，我们需要接收处理这段数据，当收到通知进行处理时，首先检查对应业务数据的状态，判断该通知是否已经处理过，如果没有处理过再进行处理，如果处理过直接返回结果成功。<br>　　<br>　　当收到这段信息以后，需要回调一段信息，告诉微信已经收到支付成功的信息了！不用再发了！<br>　　<br><figure class="highlight xml"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line"><span class="tag">&lt;<span class="name">xml</span>&gt;</span></div><div class="line"><span class="tag">&lt;<span class="name">return_code</span>&gt;</span>&lt;![CDATA[SUCCESS]]&gt;<span class="tag">&lt;/<span class="name">return_code</span>&gt;</span></div><div class="line"><span class="tag">&lt;<span class="name">return_msg</span>&gt;</span>&lt;![CDATA[OK]]&gt;<span class="tag">&lt;/<span class="name">return_msg</span>&gt;</span></div><div class="line"><span class="tag">&lt;/<span class="name">xml</span>&gt;</span></div></pre></td></tr></table></figure></p>
 <p>　　否则微信会通过一定的策略定期重新发起通知（通知频率为15/15/30/180/1800/1800/1800/1800/3600，单位：秒），</p>
 <p>　　告诉微信收到支付信息的同时，我们就可以处理其他业务信息了。～</p>
@@ -229,8 +233,7 @@
                     data-title="微信开发——微信支付（公众号支付开发）"
                     data-url="http://yoursite.com/2017/04/24/WeChat-Pay/"
                     data-images=""
-                    data-content="　　看到Tx的WeChatPay的文档真是无语了，感觉乱七八糟的……这里自己稍微整理下流程
-　... | Cchua的博客 | Cchua&#39;s Blog " >
+                    data-content="　　　　　　看到Tx的WeChatPay的文档真是无语了，感觉乱七八糟的……这里自己稍微整理下... | Cchua的博客 | Cchua&#39;s Blog " >
                     <div class="ds-share-inline">
                       <ul  class="ds-share-icons-16">
                         <li data-toggle="ds-share-icons-more"><a class="ds-more" href="#">分享到：</a></li>
@@ -250,7 +253,7 @@
                     
                     
                         <li class="next">
-                            <a href="/2017/04/19/WeChat-Server-Deploy/" data-toggle="tooltip" data-placement="top" title="微信开发——服务器的基本配置">Next Post &rarr;</a>
+                            <a href="/2017/04/19/Recommend-Postman/" data-toggle="tooltip" data-placement="top" title="实用的模拟请求——Postman">Next Post &rarr;</a>
                         </li>
                     
                 </ul>
