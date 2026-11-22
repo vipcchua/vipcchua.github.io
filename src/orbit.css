@@ -1,0 +1,97 @@
+html { scroll-behavior: smooth; }
+.orbit { background: #0d0b15; }
+.orbit button { cursor: pointer; }
+.orbit .topbar {
+  position: absolute;
+  z-index: 4;
+  inset: 0 0 auto;
+  max-width: none;
+}
+.orbit .brand, .orbit nav button { border: 0; background: transparent; color: inherit; }
+.orbit .brand { padding: 0; }
+.orbit nav { border: 1px solid #ffffff55; background: #1010187a; backdrop-filter: blur(12px); border-radius: 999px; padding: 3px; }
+.orbit nav button { border-radius: 999px; min-height: 40px; padding: 0 14px; }
+.orbit nav button:hover { background: #fff; color: #171122; }
+.orbit .hero {
+  display: grid;
+  align-content: center;
+  justify-items: center;
+  position: relative;
+  isolation: isolate;
+  min-height: 100svh;
+  padding: 95px 16px 85px;
+  background: radial-gradient(ellipse at 52% 62%, #624047, #171120 78%);
+}
+.orbit .shade { background: linear-gradient(#0908118c, #110b1240 42%, #0d0b15); }
+.orbit .hero h1 { text-shadow: 0 3px 24px #0d0714; }
+.orbit .roles { display: flex; justify-content: center; flex-wrap: wrap; margin-top: 20px; }
+.orbit .roles li { padding: 7px 13px; border-radius: 999px; background: #130b1b8a; font-size: .9rem; }
+.portal {
+  width: clamp(180px, 27vw, 330px);
+  min-height: clamp(125px, 15vw, 185px);
+  display: grid;
+  justify-items: center;
+  align-content: center;
+  gap: 8px;
+  border-radius: clamp(40px, 8vw, 94px);
+  border: 1px solid #ffebffab;
+  background: radial-gradient(ellipse at 50% 15%, #ffa4c766, #52275b77 60%, #150c238c);
+  box-shadow: 0 0 35px #fa98a961, inset 0 0 18px #fcd8ff65;
+  backdrop-filter: blur(7px);
+  transition: transform .25s ease, box-shadow .25s ease;
+}
+.portal:hover { transform: perspective(500px) rotateX(7deg) scale(1.045); box-shadow: 0 0 50px #fa98a98f; }
+.portal .portrait { width: clamp(66px, 9vw, 118px); height: auto; aspect-ratio: 1; }
+.portal span { font-size: .9rem; }
+.photo-section, .orbit .social-content { max-width: 1250px; margin: auto; padding: clamp(28px, 6vw, 88px) clamp(14px, 5vw, 64px); }
+.section-head { display: flex; align-items: baseline; justify-content: space-between; gap: 10px; margin-bottom: 18px; text-align: left; }
+.section-head h2 { font-size: clamp(1.75rem, 4vw, 3.4rem); margin: 0; font-weight: 550; }
+.section-head p { margin: 0; color: #ccc3d9; }
+.photo-wall {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: clamp(0px, 1.1vw, 16px);
+  padding: clamp(10px, 4vw, 55px);
+  border-radius: 26px;
+  overflow: clip;
+  background: radial-gradient(ellipse at 27% 24%, #554477, transparent 66%), linear-gradient(140deg, #21162d, #25314e);
+}
+.photo-tile {
+  --tilt: -8deg;
+  display: block;
+  position: relative;
+  aspect-ratio: 1.15;
+  min-width: 0;
+  padding: 0;
+  overflow: hidden;
+  border: clamp(2px, .4vw, 5px) solid #f7efffee;
+  border-radius: clamp(8px, 1.6vw, 22px);
+  background: #292334;
+  box-shadow: 0 8px 22px #0e091c88;
+  transform: rotate(var(--tilt)) scale(1.07);
+  transition: transform .22s ease, box-shadow .22s ease;
+}
+.photo-tile:nth-child(3n + 2) { --tilt: 9deg; }
+.photo-tile:nth-child(3n) { --tilt: -4deg; }
+.photo-tile:nth-child(4n) { --tilt: 12deg; }
+.photo-tile:hover, .photo-tile:focus-visible { z-index: 2; transform: rotate(0) scale(1.12); box-shadow: 0 12px 32px #080610aa; }
+.photo-tile img { display: block; width: 100%; height: 100%; object-fit: cover; }
+.lightbox { width: min(1120px, calc(100vw - 24px)); max-height: calc(100dvh - 24px); padding: 0; border: 0; color: #fff; background: transparent; }
+.lightbox::backdrop { background: #080611e8; backdrop-filter: blur(8px); }
+body:has(.lightbox[open]) { overflow: hidden; }
+.lightbox-content { display: grid; justify-items: center; padding: 8px; gap: 12px; }
+.lightbox img { display: block; max-width: 100%; max-height: calc(100dvh - 112px); object-fit: contain; border-radius: 10px; }
+.lightbox-controls { display: flex; align-items: center; justify-content: center; flex-wrap: wrap; gap: 6px; }
+.lightbox-controls button { min-height: 42px; padding-inline: 10px; border-radius: 10px; border: 1px solid #fff5; background: #fff1; }
+.orbit .profile { background: #ffffff09; }
+.orbit .profile:hover { background: #ffffff22; }
+.orbit footer { text-align: center; color: #cbc1d7; padding: 16px 12px 36px; }
+@media (max-width: 640px) {
+  .photo-wall { grid-template-columns: repeat(2, minmax(0, 1fr)); padding: 18px; gap: 9px; }
+  .orbit .topbar { padding: 10px 12px; }
+  .orbit nav button { padding-inline: 10px; }
+}
+@media (prefers-reduced-motion: reduce) {
+  html { scroll-behavior: auto; }
+  .portal, .photo-tile { transition: none; }
+}
