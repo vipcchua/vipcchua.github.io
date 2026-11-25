@@ -1,7 +1,8 @@
 import { useEffect } from 'react'
 
-export function usePhotoMotion({ wallRef, motion, active, drag, gravity }) {
+export function useWallMotion({ wallRef, motion, active, drag, gravity, paused }) {
   useEffect(() => {
+    if (paused) return
     const wall = wallRef.current
     const preference = matchMedia('(prefers-reduced-motion: reduce)')
     const slots = Array.from(wall.children)
@@ -19,7 +20,7 @@ export function usePhotoMotion({ wallRef, motion, active, drag, gravity }) {
     function animate(now) {
       const elapsed = previous ? Math.min((now - previous) / 1000, .04) : 0
       previous = now
-      const slope = gravity.current
+      const slope = gravity?.current
       const bounce = slope ? .36 : 1
       const bounds = slots.map(slot => {
         const tile = slot.firstElementChild
@@ -41,7 +42,7 @@ export function usePhotoMotion({ wallRef, motion, active, drag, gravity }) {
       slots.forEach((slot, index) => {
         const tile = slot.firstElementChild
         const box = bounds[index]
-        if (!width || !height || !box.h || !slot.classList.contains('ready') || active.current === tile || drag.current?.tile === tile) return
+        if (!width || !height || !box.h || !slot.classList.contains('ready') || active?.current === tile || drag.current?.tile === tile) return
         const minX = -box.left
         const minY = -box.top
         const limitX = Math.max(minX, width - box.right)
@@ -58,12 +59,13 @@ export function usePhotoMotion({ wallRef, motion, active, drag, gravity }) {
             vy: Math.sin(angle) * speed,
           }
           motion.current.set(slot, position)
+          slot.classList.add('positioned')
         }
         const dx = parseFloat(slot.style.getPropertyValue('--drag-x')) || 0
         const dy = parseFloat(slot.style.getPropertyValue('--drag-y')) || 0
-        const paused = preference.matches || (!position.impulse
+        const stationary = preference.matches || (!position.impulse
           && (tile.matches(':focus-visible') || (!slope && tile.matches(':hover'))))
-        if (!paused) {
+        if (!stationary) {
           if (slope) {
             const damping = Math.exp(-elapsed * 1.8)
             position.vx = (position.vx + slope.x * 780 * elapsed) * damping
@@ -92,7 +94,7 @@ export function usePhotoMotion({ wallRef, motion, active, drag, gravity }) {
       if (!preference.matches) {
         const bodies = slots.flatMap((slot, index) => {
           const body = motion.current.get(slot)
-          if (!body || active.current === slot.firstElementChild) return []
+          if (!body || active?.current === slot.firstElementChild) return []
           const held = drag.current?.slot === slot ? drag.current : null
           const box = bounds[index]
           return [{
@@ -137,5 +139,5 @@ export function usePhotoMotion({ wallRef, motion, active, drag, gravity }) {
       cancelAnimationFrame(frame)
       observer.disconnect()
     }
-  }, [wallRef, motion, active, drag, gravity])
+  }, [wallRef, motion, active, drag, gravity, paused])
 }

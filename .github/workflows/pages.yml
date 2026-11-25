@@ -30,8 +30,10 @@ jobs:
       - run: npm run build
       - name: Add direct route entry points
         run: |
-          mkdir -p dist/photos dist/social
+          mkdir -p dist/about dist/photos dist/videos dist/social
+          cp dist/index.html dist/about/index.html
           cp dist/index.html dist/photos/index.html
+          cp dist/index.html dist/videos/index.html
           cp dist/index.html dist/social/index.html
       - uses: actions/upload-pages-artifact@v3
         with:

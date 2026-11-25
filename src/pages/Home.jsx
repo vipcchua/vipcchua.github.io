@@ -1,28 +1,40 @@
 import React from 'react'
-import { profiles } from '../shared/profiles.js'
-import SocialIcon from '../shared/SocialIcon.jsx'
+import { mottoFadeDuration, mottoStartDelay, mottoTypingDuration } from '../shared/homeIntroTiming.js'
 import './home.css'
 
 const roles = ['摄影摄像', '账号运营', '程序开发', '产品经理']
-const roleMarks = ['◉', '↗', '⌘', '◇']
+const roleMarks = ['camera', 'growth', 'command', 'product']
+const motto = ['— To reach the unreachable star', '去摘遥不可及的星']
 
-export default function Home() {
+function MottoLine({ text, lang, typing, onTypingComplete }) {
+  const letters = Array.from(text)
+  return <span lang={lang}>
+    {typing ? <>
+      <span className="motto-readable">{text}</span>
+      <span aria-hidden="true">{letters.map((letter, index) => (
+        <span key={index} className="motto-letter"
+          onAnimationEnd={index === letters.length - 1 ? onTypingComplete : undefined}
+          style={{
+            animationDelay: `${mottoStartDelay + index * mottoTypingDuration / (letters.length - 1)}ms`,
+            animationDuration: `${mottoFadeDuration}ms`,
+          }}>{letter}</span>
+      ))}</span>
+    </> : text}
+  </span>
+}
+
+export default function Home({ typing, onTypingComplete }) {
   return (
     <section className="hero scene" id="home" tabIndex={-1}>
       <div className="hero-copy">
         <h1>
-          <span lang="en">— To reach the unreachable star</span>
-          <span>去摘遥不可及的星</span>
+          <MottoLine text={motto[0]} lang="en" typing={typing} />
+          <MottoLine text={motto[1]} lang="zh-Hans" typing={typing} onTypingComplete={onTypingComplete} />
         </h1>
       </div>
       <ul className="roles" aria-label="专业方向">
-        {roles.map((role, index) => <li key={role}><span aria-hidden="true">{roleMarks[index]}</span>{role}</li>)}
-      </ul>
-      <ul className="hero-social" aria-label="社交媒体" style={{ '--social-count': profiles.length }}>
-        {profiles.map(([name, , url], index) => <li key={name}>
-          <a href={url} target="_blank" rel="noopener noreferrer" aria-label={name} title={name}>
-            <SocialIcon name={name} index={index} />
-          </a>
+        {roles.map((role, index) => <li key={role}>
+          <span className={`role-mark role-mark--${roleMarks[index]}`} aria-hidden="true" />{role}
         </li>)}
       </ul>
     </section>

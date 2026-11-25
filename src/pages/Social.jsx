@@ -15,7 +15,9 @@ export default function Social() {
           </a>
         </li>)}
       </ul>
-      <footer lang="en">To reach the unreachable star</footer>
+      <footer>
+        <p lang="en">To reach the unreachable star</p>
+      </footer>
     </section>
   )
 }

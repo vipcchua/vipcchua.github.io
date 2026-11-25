@@ -5,6 +5,7 @@
   "scripts": {
     "dev": "vite --host 127.0.0.1 --port 8080 --strictPort",
     "build": "vite build",
+    "videos:update": "node scripts/update-videos.mjs",
     "preview": "vite preview --host 127.0.0.1 --port 8080 --strictPort"
   },
   "dependencies": {
@@ -14,6 +15,7 @@
     "three": "^0.160.0"
   },
   "devDependencies": {
+    "playwright-core": "^1.65.1",
     "vite": "^6.0.0",
     "wrangler": "^4.165.0"
   }

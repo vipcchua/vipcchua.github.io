@@ -19,6 +19,8 @@
   margin: 0;
   animation: scene-rise .68s .1s cubic-bezier(.16, 1, .3, 1) both;
 }
+.social-content footer p { margin: 0; }
+.site[data-mobile-layout="true"] .social-content { --social-right: var(--social-left); max-width: 850px; }
 .profile {
   display: grid;
   grid-template-columns: 24px minmax(0, 1fr);

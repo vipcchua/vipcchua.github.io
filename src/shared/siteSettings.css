@@ -1,0 +1,121 @@
+.site {
+  --settings-size: 42px;
+  --settings-right: max(14px, env(safe-area-inset-right));
+  --settings-bottom: max(12px, env(safe-area-inset-bottom));
+  --social-bottom: calc(var(--settings-bottom) + var(--settings-size) + 8px);
+}
+.site-settings {
+  position: fixed;
+  z-index: 5;
+  right: var(--settings-right);
+  bottom: var(--settings-bottom);
+  width: var(--settings-size);
+  height: 0;
+  pointer-events: none;
+  --dock-surface: #171f2be8;
+  --dock-edge: #ccdcee89;
+  --dock-ink: #edf5ff;
+  --dock-accent: #f6db9c;
+  --dock-ease: cubic-bezier(.19, .8, .26, 1);
+}
+.dock-button {
+  position: relative;
+  display: grid;
+  place-items: center;
+  width: var(--settings-size);
+  height: var(--settings-size);
+  padding: 0;
+  border: 1px solid var(--dock-edge);
+  border-radius: 50%;
+  background: var(--dock-surface);
+  color: var(--dock-ink);
+  box-shadow: inset 0 0 0 2px #c7ddf014, 0 4px 12px #090e1870;
+}
+.dock-button:hover, .dock-item:has(:popover-open) > .dock-trigger, .site-setting[aria-checked="true"] {
+  border-color: var(--dock-accent);
+  background: #293240;
+  color: var(--dock-accent);
+}
+.dock-trigger { position: absolute; right: 0; pointer-events: auto; backdrop-filter: blur(10px); }
+.dock-settings-trigger { bottom: 0; }
+.dock-social-trigger { bottom: calc(var(--settings-size) + 8px); }
+.dock-trigger svg, .site-setting svg {
+  width: 21px;
+  height: 21px;
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 1.65;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+.site-settings-panel, .site-social-panel {
+  position: fixed;
+  margin: 0;
+  border: 0;
+  background: transparent;
+  color: var(--dock-ink);
+  overflow: visible;
+}
+.site-settings-panel {
+  inset: auto calc(var(--settings-right) + var(--settings-size) + 6px) calc(var(--settings-bottom) - 4px) auto;
+  padding: 4px;
+}
+.site-settings-panel:popover-open { display: flex; gap: 7px; pointer-events: auto; }
+.site-setting[aria-checked="true"]::after {
+  content: "";
+  position: absolute;
+  right: 3px;
+  bottom: 3px;
+  width: 6px;
+  height: 6px;
+  border: 1px solid #151e2d;
+  border-radius: 50%;
+  background: var(--dock-accent);
+}
+.site-social-panel {
+  --fan-button-size: clamp(34px, 11vw, 40px);
+  inset: auto var(--settings-right) calc(var(--social-bottom) + var(--settings-size) + 8px) auto;
+  width: min(364px, calc(100% - var(--settings-right) - 8px), max(238px, calc((100dvh - var(--social-bottom) - var(--settings-size) - 42px) * 2)));
+  padding: calc(var(--fan-button-size) / 2 + 5px);
+  pointer-events: none;
+  transform-origin: calc(100% - var(--settings-size) / 2) 100%;
+}
+.site-social-panel ul {
+  position: relative;
+  aspect-ratio: 2;
+  margin: 0;
+  border: 1px solid #c5daef55;
+  border-bottom: 0;
+  border-radius: 50% 50% 0 0 / 100% 100% 0 0;
+}
+.site-social-panel li {
+  position: absolute;
+  z-index: 1;
+  left: var(--arc-x);
+  top: var(--arc-y);
+  translate: -50% -50%;
+}
+.site-social-panel .dock-button { width: var(--fan-button-size); height: var(--fan-button-size); }
+.site-social-panel:popover-open .dock-button { pointer-events: auto; }
+.site-social-panel svg { width: 18px; height: 18px; fill: currentColor; }
+@media (prefers-reduced-motion: no-preference) {
+  .dock-button { transition: background-color .17s, border-color .17s, color .17s; }
+  .dock-trigger svg { transition: rotate .24s var(--dock-ease); }
+  .dock-item:has(:popover-open) .dock-settings-trigger svg { rotate: 45deg; }
+  :is(.site-settings-panel, .site-social-panel) {
+    opacity: 0;
+    transition: opacity .17s ease, display .17s allow-discrete, overlay .17s allow-discrete;
+  }
+  :is(.site-settings-panel, .site-social-panel):popover-open { opacity: 1; }
+  .site-settings-panel:not(:popover-open) { pointer-events: none; }
+  .site-social-panel:popover-open { animation: dock-fan-in .34s var(--dock-ease) both; }
+  .site-settings-panel:popover-open .dock-button,
+  .site-social-panel:popover-open .dock-button {
+    animation: dock-button-in .27s var(--dock-ease) calc(var(--dock-order) * 26ms) both;
+  }
+}
+@keyframes dock-fan-in { from { opacity: 0; transform: translateY(10px) scale(.83); } }
+@keyframes dock-button-in {
+  from { opacity: 0; translate: 5px 0; scale: .75; box-shadow: 0 0 16px #ebd7aa8c; }
+  65% { opacity: 1; }
+}

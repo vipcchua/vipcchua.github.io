@@ -1,0 +1,67 @@
+.site:has(.video-wall-scene) { height: 100svh; overflow: clip; }
+.work-content.video-wall-scene {
+  display: flex;
+  flex-direction: column;
+  height: 100svh;
+  min-height: 0;
+  max-width: none;
+  padding: clamp(62px, 11svh, 126px) 0 0;
+}
+.video-wall-scene > :is(.section-head, .work-filters, .video-empty) {
+  flex: none;
+  margin-inline: clamp(12px, 5vw, 72px);
+}
+.video-wall-scene > .work-filters { margin-bottom: 8px; }
+.video-wall {
+  position: relative;
+  flex: 1;
+  min-height: 0;
+  overflow: clip;
+  container-type: size;
+  margin: 0;
+}
+.video-wall-slot {
+  position: absolute;
+  top: calc(var(--float-top, 0px) + var(--drag-y, 0px));
+  left: calc(var(--float-left, 0px) + var(--drag-x, 0px));
+  width: min(calc(clamp(134px, 37vw, 244px) * var(--video-size)), max(76px, calc((100cqh - 84px) * 1.45)));
+}
+.video-wall-slot:not(.positioned) { visibility: hidden; }
+.video-wall-slot:is(:hover, :focus-within) { z-index: 1; }
+.video-wall-slot.dragging { z-index: 2; }
+.video-wall-card.work-card {
+  height: auto;
+  transform: rotate(var(--tilt));
+  transform-origin: top left;
+  touch-action: none;
+  cursor: grab;
+}
+.video-wall-slot.dragging .video-wall-card { cursor: grabbing; }
+.video-wall-card .work-cover > :is(img, .video-cover-fallback) { position: absolute; inset: 0; }
+.video-wall-card .work-title {
+  display: -webkit-box;
+  margin: 7px 8px 3px;
+  font-size: .85rem;
+  line-height: 1.32;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 2;
+  overflow: hidden;
+}
+.video-wall-card .work-byline { margin: 0 8px 8px; font-size: .72rem; line-height: 1.3; flex-wrap: nowrap; white-space: nowrap; }
+.video-wall-card .work-byline span { min-width: 0; overflow: hidden; text-overflow: ellipsis; }
+.video-wall-card .video-stats { font-size: .65rem; }
+@container (max-height: 145px) {
+  .video-wall-card .work-title { margin-block: 4px 2px; -webkit-line-clamp: 1; }
+  .video-wall-card .work-byline { margin-bottom: 4px; }
+  .video-wall-card .video-stats { padding-top: 5px; font-size: .56rem; gap: 2px 4px; }
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .video-wall-slot.positioned .video-wall-card {
+    animation: video-wall-enter .65s cubic-bezier(.2, .78, .28, 1) var(--fly-delay) both;
+  }
+}
+@keyframes video-wall-enter {
+  from { opacity: 0; translate: var(--fly-x) var(--fly-y); scale: .78; }
+  to { opacity: 1; translate: 0 0; scale: 1; }
+}

@@ -1,0 +1,26 @@
+.work-filters.photo-view-switch { margin-top: 14px; margin-bottom: 0; }
+.photo-section .photo-view-switch button { pointer-events: auto; }
+.photo-cover-placeholder { display: grid; height: 100%; place-items: center; color: #d0d5df; }
+
+.photo-project-grid .work-card {
+  display: grid;
+  grid-template: minmax(0, 1fr) auto auto / minmax(0, 1fr);
+  height: auto;
+  aspect-ratio: 4 / 7;
+}
+.photo-project-grid .work-cover {
+  height: 100%;
+  min-height: 0;
+  aspect-ratio: auto;
+  overflow: hidden;
+}
+.photo-project-grid .work-cover > * { position: absolute; inset: 0; }
+.photo-project-grid .work-cover img { object-position: center; }
+.photo-project-grid .work-title {
+  display: block;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.photo-project-grid .work-byline { block-size: 1lh; line-height: 1.4; flex-wrap: nowrap; align-items: baseline; white-space: nowrap; }
+.photo-project-grid :is(.photo-project-time, .photo-project-ip) { min-width: 0; overflow: hidden; text-overflow: ellipsis; }
