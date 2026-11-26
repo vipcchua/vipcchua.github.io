@@ -12,7 +12,7 @@ export default function SiteNavigation({ screen, select, showMobilePageNumbers }
           aria-current={screen === index + 1 ? 'step' : undefined}>{label}</button>)}
       </nav>
     </header>
-    <nav className={showMobilePageNumbers ? 'screen-nav' : 'screen-nav screen-nav--mobile-hidden'}
+    <nav className="screen-nav" hidden={!showMobilePageNumbers}
       aria-label={`当前第 ${screen + 1} 屏，共 ${labels.length} 屏`}>
       {labels.map((label, index) => <button key={label}
         onClick={() => select(index)} aria-current={screen === index ? 'step' : undefined}

@@ -11,7 +11,7 @@ function photoPlacement() {
   }
 }
 
-export default function PhotoWall({ heading }) {
+export default function PhotoWall({ heading, playSound }) {
   const [placements] = useState(() => photos.map(photoPlacement))
   const active = useRef(null)
   const wallRef = useRef(null)
@@ -98,6 +98,7 @@ export default function PhotoWall({ heading }) {
     switching.current = true
     try {
       const previous = active.current
+      if (previous === tile) playSound('close')
       if (previous) await toggle(previous)
       if (previous !== tile) await toggle(tile)
     } finally {
@@ -134,6 +135,7 @@ export default function PhotoWall({ heading }) {
       const left = origin.left + (origin.width - width) / 2
       const image = tile.querySelector('img')
       if (!image.naturalWidth) { delete tile.dataset.moving; return }
+      playSound('popup')
       slot.style.height = `${slot.offsetHeight}px`
       tile.style.setProperty('--ratio', image.naturalWidth / image.naturalHeight)
       active.current = tile
@@ -172,7 +174,7 @@ export default function PhotoWall({ heading }) {
       '--rows-wide': Math.max(1, Math.ceil(photos.length / 6)),
     }}>
       {photos.map((url, index) => <div className="photo-slot" key={url} style={placements[index]}>
-        <button className="photo-tile" {...pointerHandlers} onClick={event => {
+        <button className="photo-tile" data-silent-click {...pointerHandlers} onClick={event => {
           if (!wasDragged(event)) selectPhoto(event.currentTarget)
         }} aria-expanded="false"
           aria-label={`照片 ${index + 1}，点击放大或收回`}>

@@ -4,11 +4,21 @@ import ProjectViewer from './ProjectViewer.jsx'
 import PhotoWall from './PhotoWall.jsx'
 import './photoGallery.css'
 
-export default function Photos() {
+const filterFields = [['ip', 'IP'], ['time', '时间'], ['category', '类别']].map(([field, label]) => ({
+  field, label,
+  options: [...new Set(photoProjects.map(item => item[field]).filter(Boolean))],
+}))
+
+export default function Photos({ playSound }) {
   const [showWall, setShowWall] = useState(false)
+  const [showFilters, setShowFilters] = useState(false)
+  const [filters, setFilters] = useState({})
   const [project, setProject] = useState(null)
+  const visibleProjects = photoProjects.filter(item =>
+    filterFields.every(({ field }) => !filters[field] || item[field] === filters[field]))
 
   function switchView() {
+    if (showWall) playSound('close')
     setShowWall(!showWall)
     window.scrollTo({ top: 0, behavior: 'instant' })
   }
@@ -17,18 +27,38 @@ export default function Photos() {
     <h2 id="photos-title">照片</h2>
     <p className="section-caption">作品展示</p>
     <div className="work-filters photo-view-switch">
-      <button type="button" onClick={switchView}>{showWall ? '返回照片列表' : '照片墙'}</button>
+      <button type="button" data-silent-click={showWall ? '' : undefined} onClick={switchView}>{showWall ? '返回照片列表' : '照片墙'}</button>
+      {!showWall && <>
+        <button type="button" aria-expanded={showFilters} aria-controls="photo-project-filters"
+          onClick={() => setShowFilters(open => !open)}>筛选</button>
+        <div id="photo-project-filters" className="photo-project-filters" hidden={!showFilters}>
+          {filterFields.map(({ field, label, options }) => <label key={field}>
+            <span>{label}</span>
+            <select value={filters[field] ?? ''} onChange={event => {
+              const value = event.target.value
+              setFilters(current => ({ ...current, [field]: value }))
+            }}>
+              <option value="">全部</option>
+              {options.map(option => <option key={option} value={option}>{option}</option>)}
+            </select>
+          </label>)}
+        </div>
+      </>}
     </div>
   </header>
 
-  if (showWall) return <PhotoWall heading={heading} />
+  if (showWall) return <PhotoWall heading={heading} playSound={playSound} />
 
   return <section className="work-content scene" id="photos" aria-labelledby="photos-title">
     {heading}
     {photoProjects.length === 0 && <p role="status">还没有照片项目。</p>}
+    {photoProjects.length > 0 && visibleProjects.length === 0 && <p role="status">没有符合条件的照片项目。</p>}
     <ul className="work-grid photo-project-grid" aria-label="照片项目">
-      {photoProjects.map((item, index) => <li key={item.folder} style={{ '--card-order': Math.min(index, 7) }}>
-        <button type="button" className="work-card" aria-haspopup="dialog" onClick={() => setProject(item)}>
+      {visibleProjects.map((item, index) => <li key={item.folder} style={{ '--card-order': Math.min(index, 7) }}>
+        <button type="button" className="work-card" aria-haspopup="dialog" onClick={() => {
+          playSound('popup')
+          setProject(item)
+        }}>
           <span className="work-cover">
             {item.images.length
               ? <img src={item.images[0].url} alt="" loading="lazy" decoding="async" />
@@ -42,6 +72,6 @@ export default function Photos() {
         </button>
       </li>)}
     </ul>
-    {project && <ProjectViewer project={project} onClose={() => setProject(null)} />}
+    {project && <ProjectViewer project={project} playSound={playSound} onClose={() => setProject(null)} />}
   </section>
 }

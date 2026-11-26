@@ -144,13 +144,12 @@ html:has(.project-viewer[open]) { overflow: hidden; }
   place-items: center;
   width: 42px;
   height: 42px;
-  padding: 0 0 3px;
+  padding: 0;
   border-radius: 50%;
   border-color: var(--viewer-edge);
   background: var(--viewer-glass);
-  font-size: 2rem;
-  line-height: 1;
 }
+.viewer-arrow svg { width: 19px; height: 19px; fill: none; stroke: currentColor; stroke-width: 2.2; stroke-linecap: round; stroke-linejoin: round; }
 .viewer-previous { left: clamp(8px, 2vw, 30px); }
 .viewer-next { right: clamp(8px, 2vw, 30px); }
 
@@ -189,18 +188,22 @@ html:has(.project-viewer[open]) { overflow: hidden; }
 .project-viewer[data-closing="true"] .project-viewer-layout { pointer-events: none; }
 @media (prefers-reduced-motion: no-preference) {
   .project-viewer[open]::backdrop { animation: viewer-shade-in .3s ease-out both; }
-  .project-viewer[open] .project-viewer-layout { animation: viewer-enter .3s var(--viewer-ease) both; }
+  .project-viewer[open] .project-viewer-layout { animation: media-panel-enter .56s cubic-bezier(.17, .82, .24, 1); }
   .project-viewer[open][data-closing="true"]::backdrop { animation: viewer-shade-out .22s ease-in both; }
-  .project-viewer[open][data-closing="true"] .project-viewer-layout { animation: viewer-exit .22s ease-in both; }
+  .project-viewer[open][data-closing="true"] .project-viewer-layout { animation: media-panel-exit .28s cubic-bezier(.4, 0, .7, .5) both; }
   .viewer-stage img[data-ready="true"] { animation: viewer-photo-in .28s var(--viewer-ease) both; }
   .viewer-stage:not([data-panning="true"]) img { transition: transform .27s var(--viewer-ease); }
   .project-viewer button { transition: background-color .18s, border-color .18s, opacity .18s; }
 }
 @keyframes viewer-shade-in { from { opacity: 0; } }
 @keyframes viewer-shade-out { to { opacity: 0; } }
-@keyframes viewer-enter { from { opacity: 0; transform: translateY(9px) scale(.988); } }
-@keyframes viewer-exit { to { opacity: 0; transform: translateY(6px) scale(.992); } }
 @keyframes viewer-photo-in { from { opacity: 0; scale: .985; } }
+
+.site[data-mobile-layout="true"] .project-viewer { height: 100svh; }
+@media (prefers-reduced-motion: no-preference) {
+  .site[data-mobile-layout="true"] .viewer-stage img[data-ready="true"] { animation-name: viewer-mobile-fade; }
+}
+@keyframes viewer-mobile-fade { from { opacity: 0; } }
 
 .site[data-ipad="true"] .project-viewer-header { grid-template: "back title" auto "tools tools" auto / auto minmax(0, 1fr); }
 .site[data-ipad="true"] .viewer-tools { justify-self: center; }
@@ -213,5 +216,5 @@ html:has(.project-viewer[open]) { overflow: hidden; }
   .project-viewer-header h2 { display: -webkit-box; -webkit-box-orient: vertical; -webkit-line-clamp: 2; white-space: normal; overflow-wrap: anywhere; }
   .viewer-tools { justify-self: center; }
   .viewer-stage { inset: 6px 8px; }
-  .project-viewer .viewer-arrow { width: 36px; height: 36px; font-size: 1.65rem; }
+  .project-viewer .viewer-arrow { width: 36px; height: 36px; }
 }

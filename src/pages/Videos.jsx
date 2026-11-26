@@ -12,10 +12,10 @@ const filters = [
 ]
 const portraitQuery = '(orientation: portrait)'
 
-export default function Videos({ mobileLayout }) {
+export default function Videos({ mobileLayout, playSound }) {
   const dialog = useRef(null)
   const [selectedVideo, setSelectedVideo] = useState(null)
-  const { closing, requestClose, handleClose } = useDialogExit(dialog, 'video-player-exit', () => setSelectedVideo(null))
+  const { closing, requestClose, handleClose } = useDialogExit(dialog, 'media-panel-exit', () => setSelectedVideo(null), playSound)
   const [platformFilter, setPlatformFilter] = useState('all')
   const [showWall, setShowWall] = useState(false)
   const [portrait, setPortrait] = useState(() => matchMedia(portraitQuery).matches)
@@ -25,6 +25,10 @@ export default function Videos({ mobileLayout }) {
     : videos.filter(video => (video.platform ?? 'bilibili') === platformFilter)
   const isDouyin = selectedVideo?.platform === 'douyin'
   const originalLabel = isDouyin ? '在抖音打开原视频' : '在 B 站打开原视频'
+  function openVideo(video) {
+    playSound('popup')
+    setSelectedVideo(video)
+  }
 
   useEffect(() => {
     if (selectedVideo && !dialog.current.open) dialog.current.showModal()
@@ -37,7 +41,7 @@ export default function Videos({ mobileLayout }) {
     // Scale its desktop layout as a unit to keep the controls in view.
     const updateScale = () => {
       const width = parseFloat(getComputedStyle(panel).getPropertyValue('--douyin-content-width'))
-      panel.style.setProperty('--player-scale', panel.clientWidth / width)
+      panel.style.setProperty('--player-scale', panel.querySelector('.video-frame').clientWidth / width)
     }
     updateScale()
     const orientation = matchMedia(portraitQuery)
@@ -64,7 +68,8 @@ export default function Videos({ mobileLayout }) {
       <p className="section-caption">作品展示</p>
     </header>
     <div className="work-filters" role="group" aria-label="视频展示与平台筛选">
-      <button type="button" onClick={() => {
+      <button type="button" data-silent-click={showWall ? '' : undefined} onClick={() => {
+        if (showWall) playSound('close')
         setShowWall(!showWall)
         window.scrollTo({ top: 0, behavior: 'instant' })
       }}>{showWall ? '返回视频列表' : '视频墙'}</button>
@@ -73,10 +78,10 @@ export default function Videos({ mobileLayout }) {
     </div>
     {visibleVideos.length === 0 && <p className="video-empty" role="status">这个平台还没有视频。</p>}
     {showWall
-      ? <VideoWall key={platformFilter} videos={visibleVideos} onSelect={setSelectedVideo} paused={Boolean(selectedVideo)} />
+      ? <VideoWall key={platformFilter} videos={visibleVideos} onSelect={openVideo} paused={Boolean(selectedVideo)} />
       : <ul className="work-grid" key={platformFilter}>
         {visibleVideos.map((video, index) => <li key={video.id} style={{ '--card-order': Math.min(index, 7) }}>
-          <VideoCard video={video} onClick={() => setSelectedVideo(video)} />
+          <VideoCard video={video} onClick={() => openVideo(video)} />
         </li>)}
       </ul>}
     <dialog className="video-player" data-platform={selectedVideo?.platform} data-closing={closing} style={{
@@ -89,21 +94,23 @@ export default function Videos({ mobileLayout }) {
       }}>
       {selectedVideo && <>
         <header className="video-player-header">
+          <div className="video-player-topline">
+            <span>VISUAL ARCHIVE / MOTION-PV</span>
+            <span>{isDouyin ? 'DOUYIN' : 'BILIBILI'} / PLAYER</span>
+          </div>
           <div className="video-player-heading">
-            <h2 id="video-player-title">{selectedVideo.title}</h2>
-            <a className="video-player-icon" href={selectedVideo.url} target="_blank" rel="noopener noreferrer"
+            <div className="video-player-title-group">
+              <p className="video-player-eyebrow" lang="en">Video{videos.indexOf(selectedVideo) + 1} // SELECTED WORKS</p>
+              <h2 id="video-player-title">{selectedVideo.title}</h2>
+            </div>
+            <a className="video-player-original" href={selectedVideo.url} target="_blank" rel="noopener noreferrer"
               aria-label={originalLabel} title={originalLabel}>
+              <span>{originalLabel}</span>
               <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" aria-hidden="true">
                 <path d="M14 4h6v6m0-6-9 9m-1-8H5a1 1 0 0 0-1 1v13a1 1 0 0 0 1 1h13a1 1 0 0 0 1-1v-5" />
               </svg>
             </a>
           </div>
-          <button className="video-player-icon" type="button" autoFocus onClick={requestClose}
-            aria-label="关闭播放器" title="关闭播放器">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" aria-hidden="true">
-              <path d="m6 6 12 12M18 6 6 18" />
-            </svg>
-          </button>
         </header>
         <div className={isDouyin ? 'video-frame video-frame--douyin' : 'video-frame'}>
         <iframe

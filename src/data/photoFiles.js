@@ -46,5 +46,6 @@ export const photoProjects = [...projects.entries()].sort(byPath).map(([folder, 
     name: textValue(info?.projectName) || folder,
     time: textValue(info?.projectTime),
     ip: textValue(info?.ip),
+    category: textValue(info?.category) || '未分类',
   }
 })

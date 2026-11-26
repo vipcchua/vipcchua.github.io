@@ -9,7 +9,13 @@ export default function Social() {
       <header className="section-head"><h2 id="social-title">社交主页</h2></header>
       <ul className="profile-grid">
         {profiles.map(([name, account, url], index) => <li key={name}>
-          <a className="profile" href={url} target="_blank" rel="noopener noreferrer">
+          <a className="profile" href={url} target="_blank" rel="noopener noreferrer" onPointerMove={event => {
+            if (event.pointerType !== 'mouse') return
+            const card = event.currentTarget
+            const bounds = card.getBoundingClientRect()
+            card.style.setProperty('--profile-glow-x', `${event.clientX - bounds.left}px`)
+            card.style.setProperty('--profile-glow-y', `${event.clientY - bounds.top}px`)
+          }}>
             <SocialIcon name={name} index={index} />
             <div><strong>{name}</strong><span>{account}</span></div>
           </a>

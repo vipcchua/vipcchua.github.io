@@ -21,7 +21,7 @@ function navigate(screen) {
   return screen
 }
 
-export function useScreenNavigation(mobileSwipe, mobileLayout) {
+export function useScreenNavigation(mobileSwipe, mobileLayout, playSound) {
   const [screen, setScreen] = useState(currentRoute)
   const [intro, setIntro] = useState(() => initialIntro(mobileLayout))
   const stage = useRef(null)
@@ -61,19 +61,21 @@ export function useScreenNavigation(mobileSwipe, mobileLayout) {
     let distance = 0
     let consumed = false
     let touchStart
-    const touch = matchMedia('(hover: none) and (pointer: coarse)')
-    const canChangeScreen = () => (!mobileLayout && !touch.matches) || mobileSwipe
     const overlayOpen = () => element.querySelector('dialog[open], .site-settings :popover-open')
     const isAboutScroll = event => mobileLayout && event.target.closest('.about-scroll')
 
-    function move(direction) {
-      if (overlayOpen() || element.querySelector('.is-expanded')) return
-      setScreen(navigate(Math.max(0, Math.min(routes.length - 1, currentRoute() + direction))))
+    function move(direction, sound) {
+      if ((!sound && overlayOpen()) || element.querySelector('dialog[open], .is-expanded')) return
+      const current = currentRoute()
+      const next = Math.max(0, Math.min(routes.length - 1, current + direction))
+      if (current === next) return
+      playSound('menu')
+      setScreen(navigate(next))
     }
     function wheel(event) {
-      if (!canChangeScreen() || isAboutScroll(event)) return
+      if (!mobileSwipe || isAboutScroll(event)) return
       if (event.ctrlKey || Math.abs(event.deltaX) > Math.abs(event.deltaY)) return
-      if (overlayOpen()) return
+      if (element.querySelector('dialog[open]') || event.target.closest('.site-settings')) return
       if (element.querySelector('.is-expanded')) { event.preventDefault(); return }
       const bottom = window.scrollY + window.innerHeight >= document.documentElement.scrollHeight - 2
       if ((event.deltaY > 0 && !bottom) || (event.deltaY < 0 && window.scrollY > 0)) return
@@ -83,10 +85,10 @@ export function useScreenNavigation(mobileSwipe, mobileLayout) {
       lastWheel = now
       if (consumed) return
       distance += event.deltaY * (event.deltaMode === 1 ? 16 : event.deltaMode === 2 ? 100 : 1)
-      if (Math.abs(distance) >= 32) { consumed = true; move(Math.sign(distance)) }
+      if (Math.abs(distance) >= 32) { consumed = true; move(Math.sign(distance), true) }
     }
     function start(event) {
-      if (!canChangeScreen() || overlayOpen() || event.target.closest('.photo-tile, .video-wall-card, .site-settings') || isAboutScroll(event)) {
+      if (!mobileSwipe || overlayOpen() || event.target.closest('.photo-tile, .video-wall-card, .site-settings') || isAboutScroll(event)) {
         touchStart = undefined
         return
       }
@@ -109,8 +111,19 @@ export function useScreenNavigation(mobileSwipe, mobileLayout) {
       else if (!element.querySelector('.is-expanded')) window.scrollBy({ top: dy })
     }
     function key(event) {
+      if (event.key === 'Escape' && !event.repeat) {
+        if (element.querySelector('dialog[open], .is-expanded, .site-settings-panel:popover-open')) return
+        const social = element.querySelector('.site-social-panel:popover-open')
+        if (social) {
+          event.preventDefault()
+          element.querySelector('.dock-social-trigger')?.click()
+          return
+        }
+        playSound('menu')
+        return
+      }
       if (!['PageDown', 'PageUp', 'ArrowDown', 'ArrowUp'].includes(event.key)) return
-      if (!canChangeScreen() || isAboutScroll(event)) return
+      if (!mobileSwipe || isAboutScroll(event)) return
       if (overlayOpen()) return
       const down = ['PageDown', 'ArrowDown'].includes(event.key)
       const atBottom = window.scrollY + window.innerHeight >= document.documentElement.scrollHeight - 2
@@ -131,7 +144,7 @@ export function useScreenNavigation(mobileSwipe, mobileLayout) {
       window.removeEventListener('keydown', key)
       window.removeEventListener('popstate', restoreRoute)
     }
-  }, [mobileSwipe, mobileLayout])
+  }, [mobileSwipe, mobileLayout, playSound])
 
   useEffect(() => { window.scrollTo({ top: 0, behavior: 'instant' }) }, [screen])
 

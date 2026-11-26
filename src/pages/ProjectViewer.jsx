@@ -7,7 +7,7 @@ const maxZoom = 6
 const center = { x: 0, y: 0 }
 const clamp = (value, min, max) => Math.min(max, Math.max(min, value))
 
-export default function ProjectViewer({ project, onClose }) {
+export default function ProjectViewer({ project, onClose, playSound }) {
   const dialog = useRef(null)
   const stage = useRef(null)
   const activeThumbnail = useRef(null)
@@ -20,7 +20,7 @@ export default function ProjectViewer({ project, onClose }) {
   const [zoom, setZoom] = useState(1)
   const [offset, setOffset] = useState(center)
   const [panning, setPanning] = useState(false)
-  const { closing, requestClose, handleClose } = useDialogExit(dialog, 'viewer-exit', onClose)
+  const { closing, requestClose, handleClose } = useDialogExit(dialog, 'media-panel-exit', onClose, playSound)
   const count = project.images.length
   const photo = project.images[index]
   const quarterTurn = turn % 180 !== 0
@@ -38,6 +38,7 @@ export default function ProjectViewer({ project, onClose }) {
     const element = dialog.current
     if (!element.open) element.showModal()
     const area = stage.current
+    setSize({ width: area.clientWidth, height: area.clientHeight })
     const resize = new ResizeObserver(([entry]) => {
       const { width, height } = entry.contentRect
       setSize({ width, height })
@@ -47,7 +48,13 @@ export default function ProjectViewer({ project, onClose }) {
   }, [])
 
   useEffect(() => {
-    activeThumbnail.current?.scrollIntoView({ block: 'nearest', inline: 'nearest' })
+    const thumbnail = activeThumbnail.current
+    if (!thumbnail) return
+    const rail = thumbnail.parentElement
+    const item = thumbnail.getBoundingClientRect()
+    const bounds = rail.getBoundingClientRect()
+    if (item.left < bounds.left) rail.scrollLeft -= bounds.left - item.left
+    if (item.right > bounds.right) rail.scrollLeft += item.right - bounds.right
   }, [index])
 
   function fitImage() {
@@ -118,7 +125,7 @@ export default function ProjectViewer({ project, onClose }) {
     <div className="project-viewer-layout">
       <header className="project-viewer-header">
         <button type="button" className="viewer-back viewer-icon-button" aria-label="返回" title="返回"
-          autoFocus onClick={requestClose}>
+          autoFocus data-silent-click onClick={requestClose}>
           <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M19 12H5m7 7-7-7 7-7" /></svg>
         </button>
         <div className="viewer-project-heading">
@@ -158,11 +165,11 @@ export default function ProjectViewer({ project, onClose }) {
               scaleBy(Math.exp(-event.deltaY * .002))
             }
           }}>
-          {photo && !error && <img key={photo.file} src={photo.url} draggable={false} data-ready={Boolean(natural)}
+          {photo && !error && <img key={photo.file} src={photo.url} draggable={false} data-ready={Boolean(natural && size.width && size.height)}
             alt={`${project.name}，第 ${index + 1} 张照片`}
             onLoad={event => setNatural({ width: event.currentTarget.naturalWidth, height: event.currentTarget.naturalHeight })}
             onError={() => setError(true)}
-            style={natural ? {
+            style={natural && size.width && size.height ? {
               width: natural.width * baseScale,
               height: natural.height * baseScale,
               transform: `translate(${x}px, ${y}px) rotate(${turn}deg) scale(${baseScale ? scale / baseScale : 1})`,
@@ -173,9 +180,13 @@ export default function ProjectViewer({ project, onClose }) {
         </div>
         {count > 1 && <>
           <button type="button" className="viewer-arrow viewer-previous" aria-label="上一张"
-            disabled={index === 0} onClick={() => select(index - 1)}>‹</button>
+            disabled={index === 0} onClick={() => select(index - 1)}>
+            <svg viewBox="0 0 24 24" aria-hidden="true"><path d="m15 5-7 7 7 7" /></svg>
+          </button>
           <button type="button" className="viewer-arrow viewer-next" aria-label="下一张"
-            disabled={index === count - 1} onClick={() => select(index + 1)}>›</button>
+            disabled={index === count - 1} onClick={() => select(index + 1)}>
+            <svg viewBox="0 0 24 24" aria-hidden="true"><path d="m9 5 7 7-7 7" /></svg>
+          </button>
         </>}
       </div>
       {count > 0 && <footer className="viewer-footer">

@@ -36,6 +36,23 @@
   overflow-wrap: anywhere;
 }
 .profile:hover { background: #343d4b; }
+.profile { position: relative; isolation: isolate; }
+.profile::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  border-radius: inherit;
+  pointer-events: none;
+  opacity: 0;
+  background: radial-gradient(circle at var(--profile-glow-x, 50%) var(--profile-glow-y, 50%), #d7e9ff44, transparent 55%);
+}
+.profile:is(:hover, :focus-visible)::before { opacity: 1; }
+@media (hover: hover) and (prefers-reduced-motion: no-preference) {
+  .profile { transition: translate .23s ease, border-color .23s ease, background-color .23s ease; }
+  .profile::before { transition: opacity .23s ease; }
+  .profile:is(:hover, :focus-visible) { translate: 0 -3px; border-color: #d7e9ffa0; }
+}
 .profile svg { width: 22px; height: 22px; fill: currentColor; }
 .profile div { display: grid; gap: 4px; }
 .profile strong { font-size: 1rem; line-height: 1.25; font-weight: 600; }

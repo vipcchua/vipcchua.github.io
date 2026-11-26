@@ -23,6 +23,18 @@
 .motto-letter { animation: motto-type cubic-bezier(.22, .7, .32, 1) both; }
 .motto-readable { position: absolute; width: 1px; height: 1px; overflow: hidden; clip-path: inset(50%); }
 @keyframes motto-type { from { opacity: 0; } to { opacity: 1; } }
+@supports (background-clip: text) {
+  @media (prefers-reduced-motion: no-preference) {
+    .site:is([data-intro="idle"], [data-intro="hold"]) .hero h1 > span {
+      width: max-content;
+      color: transparent;
+      background: linear-gradient(105deg, #fafafa 36%, #fff3c4 46%, #fff 50%, #dceaff 54%, #fafafa 64%) 100% 0 / 300% 100%;
+      background-clip: text;
+      animation: motto-sweep .48s ease-out both;
+    }
+  }
+}
+@keyframes motto-sweep { to { background-position: 0 0; } }
 .roles {
   position: absolute;
   bottom: clamp(20px, 4vw, 58px);

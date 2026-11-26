@@ -1,0 +1,57 @@
+.site[data-theme="day"] {
+  --day-surface: #f1f8fbea;
+  --day-ink: #183548;
+  --day-muted: #38596c;
+  --day-edge: #84a7bb90;
+}
+.site[data-theme="day"] :is(.work-card, .profile, .video-player, .work-filters > button, .photo-project-filters select, .sound-enable) {
+  color-scheme: light;
+  background: var(--day-surface);
+  border-color: var(--day-edge);
+  color: var(--day-ink);
+}
+.site[data-theme="day"] :is(.work-card:hover, .profile:hover, .work-filters > button:hover, .work-filters > button[aria-pressed="true"]) {
+  background: #fff;
+  border-color: #587f96;
+}
+.site[data-theme="day"] :is(.work-byline, .profile span, .video-player-topline, .video-player-eyebrow, .video-player-original) {
+  color: var(--day-muted);
+}
+.site[data-theme="day"] .site-settings {
+  --dock-surface: #edf7fbee;
+  --dock-ink: #214459;
+  --dock-edge: #769caf;
+  --dock-accent: #234d68;
+}
+.site[data-theme="day"] .dock-button:is(:hover, [aria-checked="true"]),
+.site[data-theme="day"] .dock-item:has(:popover-open) > .dock-trigger { background: #deedf6; }
+.site[data-theme="day"] :is(.project-viewer-header, .viewer-footer) {
+  background: var(--day-surface);
+  color: var(--day-ink);
+  border-color: var(--day-edge);
+}
+.site[data-theme="day"] :is(.viewer-project-heading h2, .viewer-project-time, .viewer-count) { color: var(--day-ink); }
+.site[data-theme="day"] .viewer-tools { background: #e2eff6; border-color: var(--day-edge); }
+.site[data-theme="day"] .project-viewer::backdrop,
+.site[data-theme="day"] .video-player::backdrop { background: #b3cad65c; }
+
+@media (prefers-reduced-motion: no-preference) {
+  :is(.video-player, .project-viewer, .work-grid .work-card, .profile)::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    z-index: 2;
+    border-radius: inherit;
+    pointer-events: none;
+    background: linear-gradient(112deg, transparent 42%, #cbe8ff16 49%, #eef8ff55 50%, #cbe8ff16 51%, transparent 58%) 100% 0 / 320% 100%;
+  }
+  :is(.video-player, .project-viewer)[open]:not([data-closing="true"])::after {
+    animation: ui-surface-sweep .72s .18s ease-out;
+  }
+}
+@media (hover: hover) and (prefers-reduced-motion: no-preference) {
+  :is(.work-grid .work-card, .profile):is(:hover, :focus-visible)::after {
+    animation: ui-surface-sweep .65s ease-out;
+  }
+}
+@keyframes ui-surface-sweep { to { background-position: 0 0; } }

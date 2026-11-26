@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react'
 
-export function useDialogExit(dialog, animationName, onClose) {
+export function useDialogExit(dialog, animationName, onClose, playSound) {
   const [closing, setClosing] = useState(false)
 
   useEffect(() => {
@@ -18,6 +18,8 @@ export function useDialogExit(dialog, animationName, onClose) {
 
   function requestClose(event) {
     event.preventDefault()
+    if (closing) return
+    playSound('close')
     setClosing(true)
   }
 

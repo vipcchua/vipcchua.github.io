@@ -1,5 +1,20 @@
 .work-filters.photo-view-switch { margin-top: 14px; margin-bottom: 0; }
 .photo-section .photo-view-switch button { pointer-events: auto; }
+.photo-project-filters:not([hidden]) { display: flex; flex-wrap: wrap; align-items: center; gap: 6px; }
+.photo-project-filters label { display: flex; align-items: center; gap: 5px; font-size: .82rem; }
+.photo-project-filters select {
+  max-width: min(150px, 35vw);
+  min-height: 36px;
+  padding-inline: 7px;
+  color: inherit;
+  background: #121820;
+  border: 1px solid #ffffff40;
+  border-radius: 8px;
+}
+@media (prefers-reduced-motion: no-preference) {
+  .photo-project-filters:not([hidden]) { animation: photo-filters-slide .24s ease-out; }
+}
+@keyframes photo-filters-slide { from { opacity: 0; translate: -14px 0; clip-path: inset(0 100% 0 0); } to { clip-path: inset(0); } }
 .photo-cover-placeholder { display: grid; height: 100%; place-items: center; color: #d0d5df; }
 
 .photo-project-grid .work-card {
