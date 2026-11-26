@@ -32,7 +32,9 @@ function publishGitHub() {
       run('git', ['remote', 'set-url', 'origin', repository], staging)
     } else {
       run('git', ['-c', 'http.lowSpeedLimit=1024', '-c', 'http.lowSpeedTime=30',
-        'clone', '--depth', '1', '--single-branch', '--branch', 'main', repository, staging])
+        'clone', '--filter=blob:none', '--no-checkout', '--depth', '1', '--single-branch',
+        '--branch', 'main', repository, staging])
+      run('git', ['read-tree', 'HEAD'], staging)
     }
     // Replace the source trees so removed photos also disappear from the published version.
     for (const name of ['src', 'public']) {
@@ -41,7 +43,8 @@ function publishGitHub() {
       rmSync(sourceTree, { recursive: true, force: true })
     }
     for (const name of siteFiles) copySiteFiles(join(project, name), join(staging, name))
-    run('git', ['add', '-A', '--', ...siteFiles], staging)
+    run('git', ['add', '-A', '--', 'src', 'public'], staging)
+    run('git', ['add', '--ignore-removal', '--', ...siteFiles.filter(name => name !== 'src' && name !== 'public')], staging)
     if (run('git', ['diff', '--cached', '--quiet'], staging, [0, 1]) === 0) {
       console.log('GitHub source is already up to date.')
       return
