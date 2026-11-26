@@ -1,6 +1,10 @@
 import React, { useEffect, useLayoutEffect, useRef } from 'react'
 import avatar from '../img/head.jpg'
+import { profiles, profileRoles } from '../shared/profiles.js'
 import './about.css'
+import './aboutProfile.css'
+
+const aboutLinks = profiles.filter(([name]) => ['B站', 'X', 'GitHub'].includes(name))
 
 const experience = [
   [2018, '深圳动漫节 · 特约摄影师'],
@@ -108,12 +112,31 @@ export default function About({ mobileLayout }) {
   return <section className="about-content scene" aria-labelledby="about-title">
     <header className="about-intro">
       <img src={avatar} alt="Cchua 华仔" width="104" height="104" />
-      <h2 className="about-role" id="about-title">资深二次元摄影师、摄像师</h2>
-      <p>主要负责大型活动中艺人、Coser 和模特的照片与视频拍摄。</p>
+      <div className="about-profile-copy">
+        <p className="about-profile-kicker" lang="en">PROFILE</p>
+        <p className="about-profile-name">Cchua 华仔</p>
+        <h2 className="about-role" id="about-title">资深二次元摄影师、摄像师</h2>
+        <p className="about-profile-bio">主要负责大型活动中艺人、Coser 和模特的照片与视频拍摄。</p>
+        <ul className="about-profile-tags" aria-label="专业方向">
+          {profileRoles.map(role => <li key={role}>{role}</li>)}
+        </ul>
+      </div>
     </header>
     <div className="about-scroll" ref={timeline} role="region" aria-label="按年份浏览拍摄经历" tabIndex={0}>
       <ol className="about-timeline" aria-label="拍摄经历">{entries}</ol>
       <ol className="about-timeline about-timeline-repeat" aria-hidden="true">{entries}</ol>
     </div>
+      <div className="about-profile-links">
+        <h3>社交链接</h3>
+        <ul>
+          {aboutLinks.map(([name, account, url]) => <li key={name}>
+            <a href={url} target="_blank" rel="noopener noreferrer">
+              <span>{name}</span>
+              <strong>{account}</strong>
+              <span className="about-profile-link-arrow" aria-hidden="true">↗</span>
+            </a>
+          </li>)}
+        </ul>
+      </div>
   </section>
 }

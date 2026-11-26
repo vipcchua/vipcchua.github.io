@@ -1,0 +1,71 @@
+.about-profile-kicker, .about-profile-name, .about-profile-links, .about-profile-tags { display: none; }
+
+@media (min-width: 651px) {
+  .site[data-touch-device="false"] .about-intro {
+    --profile-ink: #ebf7ff;
+    --profile-muted: #b3cadb;
+    --profile-accent: #79dafa;
+    --profile-line: #7ab8d551;
+    display: grid;
+    grid-template-columns: clamp(84px, 14vw, 150px) minmax(0, 1fr);
+    align-items: center;
+    gap: clamp(16px, 3.4vw, 50px);
+    padding: clamp(20px, 4vw, 50px);
+    text-align: left;
+    text-shadow: 0 1px 8px #050d19;
+  }
+  .site[data-touch-device="false"] .about-intro > img {
+    width: 100%;
+    margin: 0;
+    padding: 8px;
+    border-color: var(--profile-line);
+    box-shadow: 0 0 25px #6ed5fc3b;
+  }
+  .site[data-touch-device="false"] .about-profile-kicker {
+    display: block;
+    margin: 0 0 11px;
+    color: var(--profile-accent);
+    font-size: .68rem;
+    font-weight: 700;
+    letter-spacing: .2em;
+  }
+  .site[data-touch-device="false"] .about-profile-name {
+    display: block;
+    margin: 0 0 15px;
+    color: var(--profile-ink);
+    font-size: clamp(1.8rem, 4.8vw, 4.2rem);
+    font-weight: 350;
+    line-height: 1.08;
+  }
+  .site[data-touch-device="false"] .about-intro .about-role { color: var(--profile-ink); }
+  .site[data-touch-device="false"] .about-profile-bio { color: var(--profile-muted); }
+  .site[data-touch-device="false"] .about-profile-tags { display: flex; flex-wrap: wrap; gap: 6px; margin: 18px 0 0; }
+  .about-profile-tags li { padding: 4px 8px; border: 1px solid var(--profile-line); color: var(--profile-muted); font-size: .72rem; }
+  .site[data-touch-device="false"] .about-profile-links {
+    display: block;
+    grid-column: 1 / -1;
+    padding-top: 14px;
+    --profile-ink: #ebf7ff;
+    --profile-muted: #b3cadb;
+    --profile-accent: #79dafa;
+    --profile-line: #7ab8d551;
+  }
+  .about-profile-links h3 { margin: 0 0 10px; color: var(--profile-muted); font-size: .75rem; font-weight: 600; }
+  .about-profile-links ul { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 8px; margin: 0; }
+  .about-profile-links a {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) auto;
+    gap: 5px 6px;
+    height: 100%;
+    padding: 10px;
+    border-top: 1px solid var(--profile-accent);
+    border-bottom: 1px solid var(--profile-line);
+    background: linear-gradient(125deg, #56c9f221, transparent 72%);
+    color: var(--profile-ink);
+    font-size: .85rem;
+  }
+  .about-profile-links a:is(:hover, :focus-visible) { background: #56c9f230; }
+  .about-profile-links a > span:first-child { grid-column: 1 / -1; color: var(--profile-accent); font-size: .72rem; }
+  .about-profile-links strong { overflow-wrap: anywhere; }
+  .about-profile-link-arrow { color: var(--profile-accent); }
+}

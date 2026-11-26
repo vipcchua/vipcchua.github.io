@@ -14,4 +14,6 @@ const profiles = [
 
 const socialMarks = [siTiktok, siXiaohongshu, siBilibili, siSinaweibo, siX, siInstagram, siTiktok, siYoutube, siFacebook, siGithub]
 
-export { profiles, socialMarks }
+const profileRoles = ['摄影摄像', '账号运营', '程序开发', '产品经理']
+
+export { profiles, socialMarks, profileRoles }

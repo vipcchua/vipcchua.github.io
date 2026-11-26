@@ -8,11 +8,13 @@ import Social from './pages/Social.jsx'
 import SiteNavigation from './shared/SiteNavigation.jsx'
 import SiteSettings from './shared/SiteSettings.jsx'
 import { useDeviceLayout } from './shared/deviceLayout.js'
+import { useDesktopPointer } from './shared/useDesktopPointer.js'
 import { useUiSound } from './shared/useUiSound.js'
 import { useScreenNavigation } from './shared/useScreenNavigation.js'
 import './shared/site.css'
 import './shared/workCards.css'
 import './shared/theme.css'
+import './shared/desktopHud.css'
 
 const pages = [Home, About, Photos, Videos, Social]
 
@@ -41,12 +43,16 @@ function App() {
   const [dayMode, setDayMode] = usePagePreference('cchua-day-mode', false)
   const Page = pages[screen]
   const pushing = intro === 'push' && screen === 0
+  const desktopHud = preferenceScope === 'desktop' && !mobileLayout
+  const desktopPointer = desktopHud && screen <= 1
+  useDesktopPointer(stage, desktopPointer)
 
   return <div className="site" ref={stage} data-ipad={ipad} data-mobile-layout={mobileLayout} data-touch-device={touchDevice} data-mobile-swipe={mobileSwipe}
-    data-theme={dayMode ? 'day' : 'night'} data-intro={screen === 0 ? intro : 'idle'} onClick={playClick}>
-    <SiteNavigation screen={screen} select={select} showMobilePageNumbers={showMobilePageNumbers} />
+    data-theme={dayMode ? 'day' : 'night'} data-desktop-pointer={desktopPointer}
+    data-intro={screen === 0 ? intro : 'idle'} onClick={playClick}>
+    <SiteNavigation screen={screen} select={select} showMobilePageNumbers={showMobilePageNumbers} desktopHud={desktopHud} />
     <main>
-      {screen === 0 && <Home typing={intro === 'typing' || intro === 'hold'} onTypingComplete={finishTyping} />}
+      {screen === 0 && <Home typing={intro === 'typing' || intro === 'hold'} onTypingComplete={finishTyping} desktopHud={desktopHud} />}
       {(pushing || screen === 1) && <div className="about-frame" key="about" inert={pushing}><About mobileLayout={mobileLayout} /></div>}
       {screen > 1 && <Page mobileLayout={mobileLayout} playSound={playSound} />}
     </main>
