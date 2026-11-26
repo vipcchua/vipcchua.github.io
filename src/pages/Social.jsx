@@ -1,11 +1,13 @@
 import React from 'react'
 import { profiles } from '../shared/profiles.js'
 import SocialIcon from '../shared/SocialIcon.jsx'
+import HomeDiagnostics from './HomeDiagnostics.jsx'
 import './social.css'
 
-export default function Social() {
+export default function Social({ desktopHud, dayMode }) {
   return (
     <section className="social-content scene" id="social" tabIndex={-1} aria-labelledby="social-title">
+      {desktopHud && <HomeDiagnostics dayMode={dayMode} session />}
       <header className="section-head"><h2 id="social-title">社交主页</h2></header>
       <ul className="profile-grid">
         {profiles.map(([name, account, url], index) => <li key={name}>
@@ -22,7 +24,6 @@ export default function Social() {
         </li>)}
       </ul>
       <footer>
-        <p lang="en">To reach the unreachable star</p>
       </footer>
     </section>
   )

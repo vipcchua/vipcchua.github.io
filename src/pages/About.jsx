@@ -4,7 +4,7 @@ import { profiles, profileRoles } from '../shared/profiles.js'
 import './about.css'
 import './aboutProfile.css'
 
-const aboutLinks = profiles.filter(([name]) => ['B站', 'X', 'GitHub'].includes(name))
+import SocialIcon from '../shared/SocialIcon.jsx'
 
 const experience = [
   [2018, '深圳动漫节 · 特约摄影师'],
@@ -126,17 +126,14 @@ export default function About({ mobileLayout }) {
       <ol className="about-timeline" aria-label="拍摄经历">{entries}</ol>
       <ol className="about-timeline about-timeline-repeat" aria-hidden="true">{entries}</ol>
     </div>
-      <div className="about-profile-links">
-        <h3>社交链接</h3>
+      <nav className="about-social-icons" aria-label="社交链接">
         <ul>
-          {aboutLinks.map(([name, account, url]) => <li key={name}>
-            <a href={url} target="_blank" rel="noopener noreferrer">
-              <span>{name}</span>
-              <strong>{account}</strong>
-              <span className="about-profile-link-arrow" aria-hidden="true">↗</span>
+          {profiles.map(([name, account, url], index) => <li key={name}>
+            <a href={url} target="_blank" rel="noopener noreferrer" aria-label={name + ' ' + account} title={name}>
+              <SocialIcon name={name} index={index} />
             </a>
           </li>)}
         </ul>
-      </div>
+      </nav>
   </section>
 }

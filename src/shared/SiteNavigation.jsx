@@ -34,7 +34,7 @@ export default function SiteNavigation({ screen, select, showMobilePageNumbers, 
         </nav>
       </div>
     </header>
-    {desktopHud && <footer className="desktop-hud-caption" lang="en">CCHUA // PERSONAL SITE</footer>}
+    <footer className="desktop-hud-caption" lang="en">CCHUA // To reach the unreachable star</footer>
     <nav className="screen-nav" hidden={!showMobilePageNumbers}
       aria-label={`当前第 ${screen + 1} 屏，共 ${labels.length} 屏`}>
       {labels.map((label, index) => <button key={label}

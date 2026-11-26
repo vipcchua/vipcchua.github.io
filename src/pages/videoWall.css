@@ -1,5 +1,6 @@
 .site:has(.video-wall-scene) { height: 100svh; overflow: clip; }
 .work-content.video-wall-scene {
+  position: relative;
   display: flex;
   flex-direction: column;
   height: 100svh;
@@ -8,13 +9,17 @@
   padding: clamp(62px, 11svh, 126px) 0 0;
 }
 .video-wall-scene > :is(.section-head, .work-filters, .video-empty) {
+  position: relative;
+  z-index: 3;
   flex: none;
   margin-inline: clamp(12px, 5vw, 72px);
 }
 .video-wall-scene > .work-filters { margin-bottom: 8px; }
+.video-wall-scene > :is(.section-head, .work-filters, .video-empty) { pointer-events: none; }
+.video-wall-scene .work-filters button { pointer-events: auto; }
 .video-wall {
-  position: relative;
-  flex: 1;
+  position: absolute;
+  inset: 0;
   min-height: 0;
   overflow: clip;
   container-type: size;

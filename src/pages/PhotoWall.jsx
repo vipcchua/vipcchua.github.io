@@ -1,4 +1,5 @@
-import React, { useEffect, useRef, useState } from 'react'
+import React, { useCallback, useEffect, useRef, useState } from 'react'
+import { useWallRotation } from '../shared/useWallRotation.js'
 import { useWallMotion } from '../shared/useWallMotion.js'
 import { useWallDrag } from '../shared/useWallDrag.js'
 import { wallPhotos as photos } from '../data/photoFiles.js'
@@ -18,6 +19,9 @@ export default function PhotoWall({ heading, playSound }) {
   const motion = useRef(new Map())
   const switching = useRef(false)
   const { drag, wasDragged, pointerHandlers } = useWallDrag(motion, () => !active.current && !switching.current)
+  const canPop = useCallback(index => !switching.current && active.current?.parentElement.dataset.index !== String(index)
+    && drag.current?.slot.dataset.index !== String(index), [drag])
+  const { indexes, popped, generations } = useWallRotation(photos.length, canPop)
 
   const gravity = useRef(null)
   const [tiltEnabled, setTiltEnabled] = useState(false)
@@ -169,16 +173,17 @@ export default function PhotoWall({ heading, playSound }) {
       </button>
     </div>}
     <div className="photo-wall" ref={wallRef} style={{
-      '--rows-compact': Math.max(1, Math.ceil(photos.length / 3)),
-      '--rows-medium': Math.max(1, Math.ceil(photos.length / 5)),
-      '--rows-wide': Math.max(1, Math.ceil(photos.length / 6)),
+      '--rows-compact': Math.max(1, Math.ceil(Math.min(10, photos.length) / 3)),
+      '--rows-medium': Math.max(1, Math.ceil(Math.min(10, photos.length) / 5)),
+      '--rows-wide': Math.max(1, Math.ceil(Math.min(10, photos.length) / 6)),
     }}>
-      {photos.map((url, index) => <div className="photo-slot" key={url} style={placements[index]}>
+      {indexes.map(index => <div className="photo-slot" data-index={index} data-popped={index === popped}
+        key={`${photos[index]}:${generations[index] ?? 0}`} style={placements[index]} inert={index === popped}>
         <button className="photo-tile" data-silent-click {...pointerHandlers} onClick={event => {
           if (!wasDragged(event)) selectPhoto(event.currentTarget)
         }} aria-expanded="false"
           aria-label={`照片 ${index + 1}，点击放大或收回`}>
-          <img src={url} alt="" decoding="async" onLoad={async event => {
+          <img src={photos[index]} alt="" decoding="async" onLoad={async event => {
             const image = event.currentTarget
             await image.decode().catch(() => {})
             const slot = image.closest('.photo-slot')

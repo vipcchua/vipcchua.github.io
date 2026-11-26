@@ -25,7 +25,7 @@
   position: fixed;
   inset: auto 0 14px;
   text-align: center;
-  font-size: clamp(.7rem, 1vw, .9rem);
+  font-size: clamp(.42rem, .6vw, .54rem);
   text-shadow: 0 1px 7px #000;
   pointer-events: none;
 }
@@ -35,8 +35,7 @@
   grid-area: 1 / 1;
   justify-self: start;
   padding: 5px 11px;
-  border: 1px solid #72c5df55;
-  border-radius: 999px;
+  border: 0;
 }
 .topbar--desktop-hud .brand img { width: 24px; height: 24px; }
 .desktop-hud-clock { grid-area: 1 / 3; justify-self: end; display: flex; align-items: center; gap: 10px; }
@@ -160,9 +159,13 @@
   .home-hud-line { display: none; }
 }
 @media (hover: hover) and (pointer: fine) and (prefers-reduced-motion: no-preference) {
-  .site[data-desktop-pointer="true"]::before {
+  .site[data-desktop-pointer="true"]::before,
+  .site[data-desktop-pointer="true"] > .site-day-wallpaper {
     transform: translate(var(--pointer-slide-x, 0px), var(--pointer-slide-y, 0px)) scale(1.045);
     transition: transform .24s ease-out;
+  }
+  .site[data-desktop-pointer="true"] > .site-day-wallpaper {
+    transition: opacity .55s ease, transform .24s ease-out;
   }
   .site[data-desktop-pointer="true"]::after {
     content: "";

@@ -61,3 +61,33 @@
   .profile { gap: 6px; grid-template-columns: 16px minmax(0, 1fr); padding: 8px; }
   .profile svg { width: 15px; height: 15px; }
 }
+.site[data-theme] .social-content .profile {
+  --contact-edge: #b7d3e357;
+  --contact-tint: #3c536a9e;
+  --contact-line: #86d6ea;
+  min-width: 0;
+  overflow: hidden;
+  border: 0;
+  border-left: 1px solid var(--contact-edge);
+  border-bottom: 1px solid var(--contact-edge);
+  border-radius: 0;
+  background: linear-gradient(110deg, var(--contact-tint), transparent 88%);
+  clip-path: polygon(0 0, 96% 0, 100% 10%, 100% 100%, 0 100%);
+}
+.site[data-theme="day"] .social-content .profile {
+  --contact-edge: #407f9b70;
+  --contact-tint: #e5f5fbed;
+  --contact-line: #31bad9;
+  background: linear-gradient(110deg, var(--contact-tint), #e5f5fb8c);
+}
+.social-content .profile::after {
+  content: "";
+  position: absolute;
+  inset: 0 auto auto 0;
+  height: 1px;
+  width: 34%;
+  background: linear-gradient(90deg, var(--contact-line), transparent);
+  pointer-events: none;
+  transition: width .26s ease;
+}
+.social-content .profile:is(:hover, :focus-visible)::after { width: 100%; }

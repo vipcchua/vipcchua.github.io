@@ -154,3 +154,7 @@
   from { opacity: 0; translate: 5px 0; scale: .75; box-shadow: 0 0 16px #ebd7aa8c; }
   65% { opacity: 1; }
 }
+.site[data-mobile-layout="false"] {
+  --settings-right: clamp(8px, 1.2vw, 20px);
+  --settings-bottom: max(30px, calc(50dvh - 238px));
+}

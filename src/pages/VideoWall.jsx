@@ -1,4 +1,5 @@
-import React, { useRef, useState } from 'react'
+import React, { useCallback, useRef, useState } from 'react'
+import { useWallRotation } from '../shared/useWallRotation.js'
 import { useWallDrag } from '../shared/useWallDrag.js'
 import { useWallMotion } from '../shared/useWallMotion.js'
 import VideoCard from './VideoCard.jsx'
@@ -19,12 +20,15 @@ export default function VideoWall({ videos, onSelect, paused }) {
   const motion = useRef(new Map())
   const [placements] = useState(() => videos.map(placement))
   const { drag, wasDragged, pointerHandlers } = useWallDrag(motion)
+  const canPop = useCallback(index => !paused && drag.current?.slot.dataset.index !== String(index), [drag, paused])
+  const { indexes, popped, generations } = useWallRotation(videos.length, canPop)
   useWallMotion({ wallRef, motion, drag, paused })
 
   return <ul className="video-wall" aria-label="漂浮视频" ref={wallRef}>
-    {videos.map((video, index) => <li key={video.id} className="video-wall-slot ready" style={placements[index]}>
-      <VideoCard className="video-wall-card" video={video} {...pointerHandlers} onClick={event => {
-        if (!wasDragged(event)) onSelect(video)
+    {indexes.map(index => <li key={`${videos[index].id}:${generations[index] ?? 0}`} data-index={index} data-popped={index === popped} inert={index === popped}
+      className="video-wall-slot ready" style={placements[index]}>
+      <VideoCard className="video-wall-card" video={videos[index]} {...pointerHandlers} onClick={event => {
+        if (!wasDragged(event)) onSelect(videos[index])
       }} />
     </li>)}
   </ul>

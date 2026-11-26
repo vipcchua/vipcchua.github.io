@@ -68,15 +68,27 @@
   padding-inline: 18px;
   padding-bottom: max(12px, env(safe-area-inset-bottom));
 }
-.site[data-mobile-layout="true"] .about-intro { flex: none; margin-bottom: 12px; }
+.site[data-mobile-layout="true"] .about-intro { flex: none; margin-bottom: clamp(22px, 4svh, 36px); }
 .site[data-mobile-layout="true"] .about-scroll {
-  flex: 1 1 auto;
+  flex: 0 1 clamp(160px, 47svh, 460px);
   min-height: 0;
   overflow-y: auto;
   overscroll-behavior-y: contain;
   touch-action: pan-y pinch-zoom;
   scrollbar-width: none;
 }
+.site[data-mobile-layout="false"] .about-intro { margin-bottom: 8px; }
+.site[data-mobile-layout="true"] .about-intro {
+  text-align: center;
+}
+.site[data-mobile-layout="true"] .about-intro img { width: clamp(60px, 17vw, 88px); margin: 0 auto 8px; }
+.site[data-mobile-layout="true"] .about-profile-kicker { display: none; }
+.site[data-mobile-layout="true"] .about-profile-name { display: block; font-size: clamp(1.15rem, 6vw, 2rem); }
+.site[data-mobile-layout="true"] .about-intro :is(.about-role, .about-profile-bio) { font-size: .73rem; }
+.site[data-mobile-layout="true"] .about-profile-tags { display: flex; justify-content: center; flex-wrap: wrap; gap: 5px; margin: 5px 0 0; font-size: .6rem; }
+.site[data-mobile-layout="true"] .about-social-icons { flex: none; margin-top: clamp(28px, 8.75svh, 82px); padding-bottom: 12px; }
+.site[data-mobile-layout="true"] .about-social-icons ul { margin-top: 0; gap: 6px; }
+.site[data-mobile-layout="true"] .about-social-icons a { width: 28px; height: 28px; }
 .site[data-mobile-layout="true"] .about-scroll::-webkit-scrollbar { display: none; }
 
 @media (prefers-reduced-motion: no-preference) {

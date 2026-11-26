@@ -50,11 +50,12 @@ function App() {
   return <div className="site" ref={stage} data-ipad={ipad} data-mobile-layout={mobileLayout} data-touch-device={touchDevice} data-mobile-swipe={mobileSwipe}
     data-theme={dayMode ? 'day' : 'night'} data-desktop-pointer={desktopPointer}
     data-intro={screen === 0 ? intro : 'idle'} onClick={playClick}>
+    <div className="site-day-wallpaper" aria-hidden="true" />
     <SiteNavigation screen={screen} select={select} showMobilePageNumbers={showMobilePageNumbers} desktopHud={desktopHud} />
     <main>
-      {screen === 0 && <Home typing={intro === 'typing' || intro === 'hold'} onTypingComplete={finishTyping} desktopHud={desktopHud} />}
+      {screen === 0 && <Home typing={intro === 'typing' || intro === 'hold'} onTypingComplete={finishTyping} desktopHud={desktopHud} dayMode={dayMode} />}
       {(pushing || screen === 1) && <div className="about-frame" key="about" inert={pushing}><About mobileLayout={mobileLayout} /></div>}
-      {screen > 1 && <Page mobileLayout={mobileLayout} playSound={playSound} />}
+      {screen > 1 && <Page mobileLayout={mobileLayout} desktopHud={desktopHud} dayMode={dayMode} playSound={playSound} />}
     </main>
     <SiteSettings showSocial={screen === 0}
       showPageNumbers={showMobilePageNumbers} togglePageNumbers={() => setShowMobilePageNumbers(show => !show)}

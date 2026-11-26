@@ -5,7 +5,6 @@ export function useWallMotion({ wallRef, motion, active, drag, gravity, paused }
     if (paused) return
     const wall = wallRef.current
     const preference = matchMedia('(prefers-reduced-motion: reduce)')
-    const slots = Array.from(wall.children)
     let frame
     let previous = 0
     let width = 0
@@ -15,9 +14,12 @@ export function useWallMotion({ wallRef, motion, active, drag, gravity, paused }
       height = wall.clientHeight
     })
     observer.observe(wall)
-    slots.forEach(slot => observer.observe(slot))
 
     function animate(now) {
+      const slots = Array.from(wall.children)
+      for (const slot of motion.current.keys()) {
+        if (slot.parentElement !== wall) motion.current.delete(slot)
+      }
       const elapsed = previous ? Math.min((now - previous) / 1000, .04) : 0
       previous = now
       const slope = gravity?.current

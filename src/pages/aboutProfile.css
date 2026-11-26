@@ -69,3 +69,7 @@
   .about-profile-links strong { overflow-wrap: anywhere; }
   .about-profile-link-arrow { color: var(--profile-accent); }
 }
+.about-social-icons ul { display: flex; justify-content: center; flex-wrap: wrap; gap: 8px; margin: 28px auto 0; }
+.about-social-icons a { display: grid; width: 36px; height: 36px; place-items: center; border-radius: 50%; color: white; }
+.about-social-icons a:is(:hover,:focus-visible) { background: #ffffff26; }
+.about-social-icons svg { width: 20px; height: 20px; fill: currentColor; }

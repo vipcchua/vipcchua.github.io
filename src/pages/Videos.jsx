@@ -3,6 +3,9 @@ import videos from '../data/videos.json'
 import { useDialogExit } from '../shared/useDialogExit.js'
 import VideoCard from './VideoCard.jsx'
 import VideoWall from './VideoWall.jsx'
+import FilterIcon from '../shared/FilterIcon.jsx'
+import HomeDiagnostics from './HomeDiagnostics.jsx'
+import { moveWorkCardHighlight } from '../shared/workCardPointer.js'
 import './videos.css'
 
 const filters = [
@@ -12,11 +15,12 @@ const filters = [
 ]
 const portraitQuery = '(orientation: portrait)'
 
-export default function Videos({ mobileLayout, playSound }) {
+export default function Videos({ mobileLayout, playSound, desktopHud, dayMode }) {
   const dialog = useRef(null)
   const [selectedVideo, setSelectedVideo] = useState(null)
   const { closing, requestClose, handleClose } = useDialogExit(dialog, 'media-panel-exit', () => setSelectedVideo(null), playSound)
   const [platformFilter, setPlatformFilter] = useState('all')
+  const [showFilters, setShowFilters] = useState(false)
   const [showWall, setShowWall] = useState(false)
   const [portrait, setPortrait] = useState(() => matchMedia(portraitQuery).matches)
   const mobilePortrait = mobileLayout && portrait
@@ -63,6 +67,7 @@ export default function Videos({ mobileLayout, playSound }) {
   }, [isDouyin, mobileLayout])
 
   return <section className={`work-content scene${showWall ? ' video-wall-scene' : ''}`} aria-labelledby="videos-title">
+    {desktopHud && !showWall && <HomeDiagnostics dayMode={dayMode} session />}
     <header className="section-head">
       <h2 id="videos-title">视频</h2>
       <p className="section-caption">作品展示</p>
@@ -73,13 +78,18 @@ export default function Videos({ mobileLayout, playSound }) {
         setShowWall(!showWall)
         window.scrollTo({ top: 0, behavior: 'instant' })
       }}>{showWall ? '返回视频列表' : '视频墙'}</button>
-      {filters.map(([value, label]) => <button key={value} type="button"
-        aria-pressed={platformFilter === value} onClick={() => setPlatformFilter(value)}>{label}</button>)}
+      <button type="button" aria-expanded={showFilters} aria-controls="video-platform-filters"
+        className="filter-toggle" aria-label="筛选视频" title="筛选视频"
+        onClick={() => setShowFilters(open => !open)}><FilterIcon /></button>
+      <div id="video-platform-filters" className="filter-buttons" hidden={!showFilters}>
+        {filters.map(([value, label]) => <button key={value} type="button"
+          aria-pressed={platformFilter === value} onClick={() => setPlatformFilter(value)}>{label}</button>)}
+      </div>
     </div>
     {visibleVideos.length === 0 && <p className="video-empty" role="status">这个平台还没有视频。</p>}
     {showWall
       ? <VideoWall key={platformFilter} videos={visibleVideos} onSelect={openVideo} paused={Boolean(selectedVideo)} />
-      : <ul className="work-grid" key={platformFilter}>
+      : <ul className="work-grid" key={platformFilter} onPointerMove={moveWorkCardHighlight}>
         {visibleVideos.map((video, index) => <li key={video.id} style={{ '--card-order': Math.min(index, 7) }}>
           <VideoCard video={video} onClick={() => openVideo(video)} />
         </li>)}

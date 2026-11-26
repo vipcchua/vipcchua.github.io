@@ -56,7 +56,6 @@
   border-radius: 8px;
   background: #171320d9;
 }
-.photo-section h2 { font-size: clamp(1.5rem, 5.5svh, 4.5rem); }
 .photo-wall {
   --rows: var(--rows-wide);
   --columns: 6;

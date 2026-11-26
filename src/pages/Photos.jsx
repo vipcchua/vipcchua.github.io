@@ -2,6 +2,9 @@ import React, { useState } from 'react'
 import { photoProjects } from '../data/photoFiles.js'
 import ProjectViewer from './ProjectViewer.jsx'
 import PhotoWall from './PhotoWall.jsx'
+import FilterIcon from '../shared/FilterIcon.jsx'
+import HomeDiagnostics from './HomeDiagnostics.jsx'
+import { moveWorkCardHighlight } from '../shared/workCardPointer.js'
 import './photoGallery.css'
 
 const filterFields = [['ip', 'IP'], ['time', '时间'], ['category', '类别']].map(([field, label]) => ({
@@ -9,7 +12,7 @@ const filterFields = [['ip', 'IP'], ['time', '时间'], ['category', '类别']].
   options: [...new Set(photoProjects.map(item => item[field]).filter(Boolean))],
 }))
 
-export default function Photos({ playSound }) {
+export default function Photos({ playSound, desktopHud, dayMode }) {
   const [showWall, setShowWall] = useState(false)
   const [showFilters, setShowFilters] = useState(false)
   const [filters, setFilters] = useState({})
@@ -30,18 +33,15 @@ export default function Photos({ playSound }) {
       <button type="button" data-silent-click={showWall ? '' : undefined} onClick={switchView}>{showWall ? '返回照片列表' : '照片墙'}</button>
       {!showWall && <>
         <button type="button" aria-expanded={showFilters} aria-controls="photo-project-filters"
-          onClick={() => setShowFilters(open => !open)}>筛选</button>
+          className="filter-toggle" aria-label="筛选照片" title="筛选照片"
+          onClick={() => setShowFilters(open => !open)}><FilterIcon /></button>
         <div id="photo-project-filters" className="photo-project-filters" hidden={!showFilters}>
-          {filterFields.map(({ field, label, options }) => <label key={field}>
+          {filterFields.map(({ field, label, options }) => <div className="filter-buttons" role="group" aria-label={label} key={field}>
             <span>{label}</span>
-            <select value={filters[field] ?? ''} onChange={event => {
-              const value = event.target.value
-              setFilters(current => ({ ...current, [field]: value }))
-            }}>
-              <option value="">全部</option>
-              {options.map(option => <option key={option} value={option}>{option}</option>)}
-            </select>
-          </label>)}
+            {['', ...options].map(value => <button type="button" key={value}
+              aria-pressed={(filters[field] ?? '') === value}
+              onClick={() => setFilters(current => ({ ...current, [field]: value }))}>{value || '全部'}</button>)}
+          </div>)}
         </div>
       </>}
     </div>
@@ -50,10 +50,11 @@ export default function Photos({ playSound }) {
   if (showWall) return <PhotoWall heading={heading} playSound={playSound} />
 
   return <section className="work-content scene" id="photos" aria-labelledby="photos-title">
+    {desktopHud && <HomeDiagnostics dayMode={dayMode} session />}
     {heading}
     {photoProjects.length === 0 && <p role="status">还没有照片项目。</p>}
     {photoProjects.length > 0 && visibleProjects.length === 0 && <p role="status">没有符合条件的照片项目。</p>}
-    <ul className="work-grid photo-project-grid" aria-label="照片项目">
+    <ul className="work-grid photo-project-grid" aria-label="照片项目" onPointerMove={moveWorkCardHighlight}>
       {visibleProjects.map((item, index) => <li key={item.folder} style={{ '--card-order': Math.min(index, 7) }}>
         <button type="button" className="work-card" aria-haspopup="dialog" onClick={() => {
           playSound('popup')
